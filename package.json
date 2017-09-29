@@ -1,0 +1,10 @@
+{
+  "name": "kenga-fields",
+  "version": "0.0.1",
+  "description": "Kenga input widgets.",
+  "main": "index.js",
+  "repository": "https://github.com/marat-gainullin/kenga-fields.git",
+  "author": "marat-gainullin <mg@altsoft.biz>",
+  "license": "BSD-3-Clause",
+  "private": false
+}
