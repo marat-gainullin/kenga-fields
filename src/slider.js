@@ -1,20 +1,17 @@
-define([
-    'core/extend',
-    './i18n',
-    './constraint-field'], function (
-        extend,
-        i18n,
-        ConstraintField) {
-    function RangeField(shell) {
-        var box = document.createElement('input');
+import i18n from './i18n';
+import ConstraintField from './constraint-field';
+
+class RangeField extends ConstraintField {
+    constructor(shell) {
+        const box = document.createElement('input');
         box.type = 'range';
         if (!shell)
             shell = box;
 
-        ConstraintField.call(this, box, shell);
-        var self = this;
-        var value = null;
-        var text = '';
+        super(box, shell);
+        const self = this;
+        let value = null;
+        let text = '';
         box.classList.add('p-indeterminate');
 
         function checkNullClasses() {
@@ -26,11 +23,11 @@ define([
         }
 
         function textSourceChanged(aText) {
-            var oldValue = value;
+            const oldValue = value;
             if (aText !== '') {
-                var parsed = parseFloat(aText);
+                const parsed = parseFloat(aText);
                 if (isNaN(parsed)) {
-                    self.error = i18n['not.a.number'] + '(' + aText + ')';
+                    self.error = `${i18n['not.a.number']}(${aText})`;
                 } else {
                     value = parsed;
                 }
@@ -53,16 +50,16 @@ define([
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function () {
+            get: function() {
                 return boxTextChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function () {
+            get: function() {
                 return text;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (aValue && isNaN(parseFloat(aValue)))
                     return;
                 if (text !== aValue) {
@@ -74,15 +71,15 @@ define([
         });
 
         Object.defineProperty(this, 'value', {
-            get: function () {
+            get: function() {
                 return value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (!isNaN(aValue)) {
                     if (value !== aValue) {
-                        var oldValue = value;
+                        const oldValue = value;
                         value = aValue;
-                        text = value != null ? value + '' : '';
+                        text = value != null ? `${value}` : '';
                         box.value = text;
                         checkNullClasses();
                         self.fireValueChanged(oldValue);
@@ -91,6 +88,6 @@ define([
             }
         });
     }
-    extend(RangeField, ConstraintField);
-    return RangeField;
-});
+}
+
+export default RangeField;

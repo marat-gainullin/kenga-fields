@@ -1,17 +1,15 @@
-define([
-    'core/extend',
-    './text-field'], function (
-        extend,
-        TextField) {
-    function UrlField(shell) {
-        var box = document.createElement('input');
+import TextField from './text-field';
+
+class UrlField extends TextField {
+    constructor(shell) {
+        const box = document.createElement('input');
         box.type = 'url';
-        if(!shell)
+        if (!shell)
             shell = box;
-        
-        TextField.call(this, '', box, shell);
-        var self = this;
+
+        super('', box, shell);
+        const self = this;
     }
-    extend(UrlField, TextField);
-    return UrlField;
-});
+}
+
+export default UrlField;

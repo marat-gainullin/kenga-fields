@@ -1,32 +1,26 @@
-define([
-    'core/invoke',
-    'core/logger',
-    'core/extend',
-    './i18n',
-    'ui/events/item-event',
-    './box-field'], function (
-        Invoke,
-        Logger,
-        extend,
-        i18n,
-        SelectionEvent,
-        BoxField) {
-    function DropDownField(shell) {
-        var box = document.createElement('select');
+import Invoke from 'core/invoke';
+import Logger from 'core/logger';
+import i18n from './i18n';
+import SelectionEvent from 'ui/events/item-event';
+import BoxField from './box-field';
+
+class DropDownField extends BoxField {
+    constructor(shell) {
+        const box = document.createElement('select');
         if (!shell) {
             shell = box;
         }
-        BoxField.call(this, box, shell);
+        super(box, shell);
 
-        var self = this;
-        var value = null;
-        var nullItem = document.createElement('option');
+        const self = this;
+        let value = null;
+        const nullItem = document.createElement('option');
         nullItem.innerText = '< . >';
         nullItem.className = 'p-indeterminate';
         nullItem.value = '';
         nullItem['js-value'] = null;
         box.appendChild(nullItem);
-        var valuesIndicies = null;
+        let valuesIndicies = null;
 
         function invalidateValuesIndicies() {
             valuesIndicies = null;
@@ -35,14 +29,14 @@ define([
         function validateValuesIndicies() {
             if (!valuesIndicies) {
                 valuesIndicies = new Map();
-                for (var i = 0; i < box.options.length; i++) {
+                for (let i = 0; i < box.options.length; i++) {
                     valuesIndicies.set(box.options[i]['js-value'], i);
                 }
             }
         }
 
         function itemChanged() {
-            var oldValue = value;
+            const oldValue = value;
             if (box.selectedIndex === -1) {
                 value = null;
             } else {
@@ -52,27 +46,27 @@ define([
             self.fireValueChanged(oldValue);
         }
 
-        var selectionHandlers = new Set();
+        const selectionHandlers = new Set();
 
         function addSelectionHandler(handler) {
             selectionHandlers.add(handler);
             return {
-                removeHandler: function () {
+                removeHandler: function() {
                     selectionHandlers.delete(handler);
                 }
             };
         }
 
         Object.defineProperty(this, 'addSelectionHandler', {
-            get: function () {
+            get: function() {
                 return addSelectionHandler;
             }
         });
 
         function fireSelected(aItem) {
-            var event = new SelectionEvent(self, aItem);
-            selectionHandlers.forEach(function (h) {
-                Invoke.later(function () {
+            const event = new SelectionEvent(self, aItem);
+            selectionHandlers.forEach(h => {
+                Invoke.later(() => {
                     h(event);
                 });
             });
@@ -80,17 +74,17 @@ define([
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function () {
+            get: function() {
                 return itemChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function () {
+            get: function() {
                 if (box.selectedIndex === -1) {
                     return '';
                 } else {
-                    var item = itemAt(box.selectedIndex);
+                    const item = itemAt(box.selectedIndex);
                     if (item)
                         return item.innerText;
                     else
@@ -100,13 +94,13 @@ define([
         });
 
         Object.defineProperty(this, 'value', {
-            get: function () {
+            get: function() {
                 return value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (value !== aValue) {
                     if (aValue != null) {
-                        var index = indexOfValue(aValue);
+                        const index = indexOfValue(aValue);
                         if (index !== -1) {
                             box.selectedIndex = index;
                         } else {
@@ -121,10 +115,10 @@ define([
         });
 
         Object.defineProperty(this, 'selectedIndex', {
-            get: function () {
+            get: function() {
                 return box.selectedIndex;
             },
-            set: function (index) {
+            set: function(index) {
                 if (index >= 0 && index < getCount()) {
                     box.selectedIndex = index;
                 } else {
@@ -135,16 +129,16 @@ define([
         });
 
         Object.defineProperty(this, 'count', {
-            get: function () {
+            get: function() {
                 return box.options.length;
             }
         });
 
         Object.defineProperty(this, 'visibleItemCount', {
-            get: function () {
+            get: function() {
                 return box.size;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 box.size = aValue;
             }
         });
@@ -159,10 +153,10 @@ define([
 
         Object.defineProperty(this, "emptyText", {
             configurable: true,
-            get: function () {
+            get: function() {
                 return nullItem.innerText;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 nullItem.innerText = aValue ? aValue : '< . >';
             }
         });
@@ -174,14 +168,14 @@ define([
         }
 
         Object.defineProperty(this, 'addValue', {
-            get: function () {
+            get: function() {
                 return addValue;
             }
         });
 
         function insertValue(insertAt, aLabel, aValue) {
             if (aValue !== null) {
-                var index = indexOfValue(aValue);
+                const index = indexOfValue(aValue);
                 if (index === -1) {
                     addItem(insertAt, aLabel, aValue);
                 }
@@ -189,57 +183,57 @@ define([
         }
 
         Object.defineProperty(this, 'insertValue', {
-            get: function () {
+            get: function() {
                 return insertValue;
             }
         });
 
         function updateLabel(aValue, aLabel) {
             if (aValue !== null) {
-                var index = indexOfValue(aValue);
+                const index = indexOfValue(aValue);
                 if (index !== -1) {
-                    var item = itemAt(index);
+                    const item = itemAt(index);
                     item.innerText = aLabel;
                 }
             }
         }
 
         Object.defineProperty(this, 'updateLabel', {
-            get: function () {
+            get: function() {
                 return updateLabel;
             }
         });
 
         function valueAt(index) {
-            var item = itemAt(index);
+            const item = itemAt(index);
             return item ? item['js-value'] : null;
         }
 
         Object.defineProperty(this, 'valueAt', {
-            get: function () {
+            get: function() {
                 return valueAt;
             }
         });
 
         function labelAt(index) {
-            var item = itemAt(index);
+            const item = itemAt(index);
             return item ? item.innerText : null;
         }
 
         Object.defineProperty(this, 'labelAt', {
-            get: function () {
+            get: function() {
                 return labelAt;
             }
         });
 
         function removeValue(aValue) {
-            var index = indexOfValue(aValue);
-            var removed = removeItem(index);
+            const index = indexOfValue(aValue);
+            const removed = removeItem(index);
             return removed ? true : false;
         }
 
         Object.defineProperty(this, 'removeValue', {
-            get: function () {
+            get: function() {
                 return removeValue;
             }
         });
@@ -253,7 +247,7 @@ define([
         }
 
         Object.defineProperty(this, 'clear', {
-            get: function () {
+            get: function() {
                 return clear;
             }
         });
@@ -262,10 +256,10 @@ define([
             if (aValue !== null && index >= 0 && index <= box.options.length) {
                 if (index === 0)
                     Logger.warning(i18n['null.item.index']);
-                var item = document.createElement('option');
+                const item = document.createElement('option');
                 item.innerText = aLabel;
                 item['js-value'] = aValue;
-                var wasUnselected = box.selectedIndex === -1;
+                const wasUnselected = box.selectedIndex === -1;
                 if (index === box.options.length) {
                     box.appendChild(item);
                     if (valuesIndicies)
@@ -279,9 +273,10 @@ define([
                 }
             }
         }
+
         function removeItem(index) {
             if (index >= 0 && index < box.options.length) {
-                var item = box.options[index];
+                const item = box.options[index];
                 if (item !== nullItem) {
                     box.removeChild(item);
                     invalidateValuesIndicies();
@@ -296,12 +291,12 @@ define([
         }
 
         Object.defineProperty(this, 'indexOfValue', {
-            get: function () {
+            get: function() {
                 return indexOfValue;
             }
         });
 
     }
-    extend(DropDownField, BoxField);
-    return DropDownField;
-});
+}
+
+export default DropDownField;

@@ -1,17 +1,15 @@
-define([
-    'core/extend',
-    './text-field'], function (
-        extend,
-        TextField) {
-    function PhoneField(shell) {
-        var box = document.createElement('input');
+import TextField from './text-field';
+
+class PhoneField extends TextField {
+    constructor(shell) {
+        const box = document.createElement('input');
         box.type = 'tel';
-        if(!shell)
+        if (!shell)
             shell = box;
-        
-        TextField.call(this, '', box, shell);
-        var self = this;
+
+        super('', box, shell);
+        const self = this;
     }
-    extend(PhoneField, TextField);
-    return PhoneField;
-});
+}
+
+export default PhoneField;

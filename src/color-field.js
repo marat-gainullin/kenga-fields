@@ -1,31 +1,28 @@
-define([
-    'core/extend',
-    'ui/color',
-    './box-field'], function (
-        extend,
-        Color,
-        BoxField) {
-    function ColorField(shell) {
-        var box = document.createElement('input');
+import Color from 'ui/color';
+import BoxField from './box-field';
+
+class ColorField extends BoxField {
+    constructor(shell) {
+        const box = document.createElement('input');
         box.type = 'color';
-        if(!shell)
+        if (!shell)
             shell = box;
 
-        BoxField.call(this, box, shell);
-        var self = this;
-        var value = null;
+        super(box, shell);
+        const self = this;
+        let value = null;
 
         function format(color) {
             return color ? color.toString() : '#000000';
         }
 
         function parse(source) {
-            var parsed = Color.parse(source);
+            const parsed = Color.parse(source);
             return parsed ? new Color(parsed.red, parsed.green, parsed.blue, parsed.alpha) : parsed;
         }
 
         function textChanged() {
-            var oldValue = value;
+            const oldValue = value;
             value = parse(box.value);
             if (value !== oldValue) {
                 self.fireValueChanged(oldValue);
@@ -34,16 +31,16 @@ define([
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function () {
+            get: function() {
                 return textChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function () {
+            get: function() {
                 return box.value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (box.value !== aValue) {
                     box.value = aValue;
                     textChanged();
@@ -52,12 +49,12 @@ define([
         });
 
         Object.defineProperty(this, 'value', {
-            get: function () {
+            get: function() {
                 return value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (value !== aValue) {
-                    var oldValue = value;
+                    const oldValue = value;
                     value = aValue;
                     box.value = format(value);
                     self.fireValueChanged(oldValue);
@@ -65,6 +62,6 @@ define([
             }
         });
     }
-    extend(ColorField, BoxField);
-    return ColorField;
-});
+}
+
+export default ColorField;

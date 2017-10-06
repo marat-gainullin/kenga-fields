@@ -1,17 +1,15 @@
-define([
-    'core/extend',
-    './text-field'], function (
-        extend,
-        TextField) {
-    function EMailField(shell) {
-        var box = document.createElement('input');
+import TextField from './text-field';
+
+class EMailField extends TextField {
+    constructor(shell) {
+        const box = document.createElement('input');
         box.type = 'email';
-        if(!shell)
+        if (!shell)
             shell = box;
-        
-        TextField.call(this, '', box, shell);
-        var self = this;
+
+        super('', box, shell);
+        const self = this;
     }
-    extend(EMailField, TextField);
-    return EMailField;
-});
+}
+
+export default EMailField;

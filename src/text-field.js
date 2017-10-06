@@ -1,9 +1,7 @@
-define([
-    'core/extend',
-    './box-field'], function (
-        extend,
-        BoxField) {
-    function TextField(text, box, shell) {
+import BoxField from './box-field';
+
+class TextField extends BoxField {
+    constructor(text, box, shell) {
         if (arguments.length < 1)
             text = '';
         if (!box) {
@@ -14,29 +12,29 @@ define([
             shell = box;
         }
         box.value = text;
-        BoxField.call(this, box, shell);
+        super(box, shell);
 
-        var self = this;
-        var value = null;
+        const self = this;
+        let value = null;
 
         function textChanged() {
-            var oldValue = value;
+            const oldValue = value;
             value = box.value === '' ? null : box.value;
             self.fireValueChanged(oldValue);
         }
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function () {
+            get: function() {
                 return textChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function () {
+            get: function() {
                 return box.value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (box.value !== aValue) {
                     box.value = aValue;
                     textChanged();
@@ -45,17 +43,17 @@ define([
         });
 
         Object.defineProperty(this, 'value', {
-            get: function () {
+            get: function() {
                 return value;
             },
-            set: function (aValue) {
-                var oldValue = value;
+            set: function(aValue) {
+                const oldValue = value;
                 value = aValue !== undefined ? aValue : null;
                 box.value = value;
                 self.fireValueChanged(oldValue);
             }
         });
     }
-    extend(TextField, BoxField);
-    return TextField;
-});
+}
+
+export default TextField;

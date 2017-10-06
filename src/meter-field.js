@@ -1,44 +1,42 @@
-define([
-    'core/extend',
-    './progress-field'], function (
-        extend,
-        ProgressField) {
-    function MeterField(shell) {
-        var box = document.createElement('meter');
-        if(!shell)
+import ProgressField from './progress-field';
+
+class MeterField extends ProgressField {
+    constructor(shell) {
+        const box = document.createElement('meter');
+        if (!shell)
             shell = box;
-        ProgressField.call(this, box, shell);
-        
-        var self = this;
+        super(box, shell);
+
+        const self = this;
 
         Object.defineProperty(this, 'low', {
-            get: function () {
-                var boxLow = parseFloat(box.low);
+            get: function() {
+                const boxLow = parseFloat(box.low);
                 return isNaN(boxLow) ? null : boxLow;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 box.low = aValue;
             }
         });
         Object.defineProperty(this, 'high', {
-            get: function () {
-                var boxHigh = parseFloat(box.high);
+            get: function() {
+                const boxHigh = parseFloat(box.high);
                 return isNaN(boxHigh) ? null : boxHigh;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 box.high = aValue;
             }
         });
         Object.defineProperty(this, 'optimum', {
-            get: function () {
-                var boxOptimum = parseFloat(box.optimum);
+            get: function() {
+                const boxOptimum = parseFloat(box.optimum);
                 return isNaN(boxOptimum) ? null : boxOptimum;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 box.optimum = aValue;
             }
         });
     }
-    extend(MeterField, ProgressField);
-    return MeterField;
-});
+}
+
+export default MeterField;

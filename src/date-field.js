@@ -1,35 +1,32 @@
-define([
-    'core/extend',
-    './i18n',
-    './box-field'], function (
-        extend,
-        i18n,
-        BoxField) {
-    function DateField(shell) {
-        var box = document.createElement('input');
+import i18n from './i18n';
+import BoxField from './box-field';
+
+class DateField extends BoxField {
+    constructor(shell) {
+        const box = document.createElement('input');
         box.type = 'date';
-        if(!shell)
+        if (!shell)
             shell = box;
-        
-        BoxField.call(this, box, shell);
-        var self = this;
-        var value = null;
+
+        super(box, shell);
+        const self = this;
+        let value = null;
 
         function parse(source) {
-            return new Date(source + 'T00:00:00.000Z');
+            return new Date(`${source}T00:00:00.000Z`);
         }
 
         function format(date) {
-            var json = date.toJSON();
+            const json = date.toJSON();
             return json.substring(0, json.length - 'T00:00:00.000Z'.length);
         }
 
         function textChanged() {
-            var oldValue = value;
+            const oldValue = value;
             if (box.value !== '') {
-                var parsed = parse(box.value);
+                const parsed = parse(box.value);
                 if (isNaN(parsed.valueOf())) {
-                    self.error = i18n['not.a.date'] + '(' + box.value + ')';
+                    self.error = `${i18n['not.a.date']}(${box.value})`;
                 } else {
                     value = parsed;
                 }
@@ -43,16 +40,16 @@ define([
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function () {
+            get: function() {
                 return textChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function () {
+            get: function() {
                 return box.value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (box.value !== aValue) {
                     box.value = aValue;
                     textChanged();
@@ -61,12 +58,12 @@ define([
         });
 
         Object.defineProperty(this, 'value', {
-            get: function () {
+            get: function() {
                 return value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (value !== aValue) {
-                    var oldValue = value;
+                    const oldValue = value;
                     value = aValue;
                     box.value = value != null ? format(value) : '';
                     self.fireValueChanged(oldValue);
@@ -74,6 +71,6 @@ define([
             }
         });
     }
-    extend(DateField, BoxField);
-    return DateField;
-});
+}
+
+export default DateField;

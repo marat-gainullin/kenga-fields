@@ -18,14 +18,14 @@
 // the files to your server and use them there. Thank you.
 // ===================================================================
 
-var MONTH_NAMES = new Array('January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
-var DAY_NAMES = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+const MONTH_NAMES = new Array('January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+const DAY_NAMES = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 function LZ(x) {
     return (x < 0 || x > 9 ? "" : "0") + x
 }
 
 function isDate(val, format) {
-    var date = parse(val, format);
+    const date = parse(val, format);
     if (date == 0) {
         return false;
     }
@@ -33,8 +33,8 @@ function isDate(val, format) {
 }
 
 function compareDates(date1, dateformat1, date2, dateformat2) {
-    var d1 = parse(date1, dateformat1);
-    var d2 = parse(date2, dateformat2);
+    const d1 = parse(date1, dateformat1);
+    const d2 = parse(date2, dateformat2);
     if (d1 == 0 || d2 == 0) {
         return -1;
     } else if (d1 > d2) {
@@ -45,19 +45,34 @@ function compareDates(date1, dateformat1, date2, dateformat2) {
 
 function format(date, format) {
     format = format + "";
-    var result = "";
-    var i_format = 0;
-    var c = "";
-    var token = "";
-    var y = date.getYear() + "";
-    var M = date.getMonth() + 1;
-    var d = date.getDate();
-    var E = date.getDay();
+    let result = "";
+    let i_format = 0;
+    let c = "";
+    let token = "";
+    let y = date.getYear() + "";
+    const M = date.getMonth() + 1;
+    const d = date.getDate();
+    const E = date.getDay();
     var H = date.getHours();
-    var m = date.getMinutes();
-    var s = date.getSeconds();
-    var yyyy, yy, MMM, MM, dd, hh, h, mm, ss, ampm, HH, H, KK, K, kk, k;
-    var value = new Object();
+    const m = date.getMinutes();
+    const s = date.getSeconds();
+    let yyyy;
+    let yy;
+    let MMM;
+    let MM;
+    let dd;
+    let hh;
+    let h;
+    let mm;
+    let ss;
+    let ampm;
+    let HH;
+    let H;
+    let KK;
+    let K;
+    let kk;
+    let k;
+    const value = new Object();
     if (y.length < 4) {
         y = "" + (y - 0 + 1900);
     }
@@ -114,8 +129,8 @@ function format(date, format) {
     return result;
 }
 function _isInteger(val) {
-    var digits = "1234567890";
-    for (var i = 0; i < val.length; i++) {
+    const digits = "1234567890";
+    for (let i = 0; i < val.length; i++) {
         if (digits.indexOf(val.charAt(i)) == -1) {
             return false;
         }
@@ -123,8 +138,8 @@ function _isInteger(val) {
     return true;
 }
 function _getInt(str, i, minlength, maxlength) {
-    for (var x = maxlength; x >= minlength; x--) {
-        var token = str.substring(i, i + x);
+    for (let x = maxlength; x >= minlength; x--) {
+        const token = str.substring(i, i + x);
         if (token.length < minlength) {
             return null;
         }
@@ -137,20 +152,20 @@ function _getInt(str, i, minlength, maxlength) {
 function parse(val, format) {
     val = val + "";
     format = format + "";
-    var i_val = 0;
-    var i_format = 0;
-    var c = "";
-    var token = "";
-    var token2 = "";
-    var x, y;
-    var now = new Date();
-    var year = now.getYear();
-    var month = now.getMonth() + 1;
-    var date = 1;
-    var hh = now.getHours();
-    var mm = now.getMinutes();
-    var ss = now.getSeconds();
-    var ampm = "";
+    let i_val = 0;
+    let i_format = 0;
+    let c = "";
+    let token = "";
+    const token2 = "";
+    let x, y;
+    const now = new Date();
+    let year = now.getYear();
+    let month = now.getMonth() + 1;
+    let date = 1;
+    let hh = now.getHours();
+    let mm = now.getMinutes();
+    let ss = now.getSeconds();
+    let ampm = "";
     while (i_format < format.length) {
         c = format.charAt(i_format);
         token = "";
@@ -185,7 +200,7 @@ function parse(val, format) {
         } else if (token == "MMM" || token == "NNN") {
             month = 0;
             for (var i = 0; i < MONTH_NAMES.length; i++) {
-                var month_name = MONTH_NAMES[i];
+                const month_name = MONTH_NAMES[i];
                 if (val.substring(i_val, i_val + month_name.length).toLowerCase() == month_name.toLowerCase()) {
                     if (token == "MMM" || (token == "NNN" && i > 11)) {
                         month = i + 1;
@@ -202,7 +217,7 @@ function parse(val, format) {
             }
         } else if (token == "EE" || token == "E") {
             for (var i = 0; i < DAY_NAMES.length; i++) {
-                var day_name = DAY_NAMES[i];
+                const day_name = DAY_NAMES[i];
                 if (val.substring(i_val, i_val + day_name.length).toLowerCase() == day_name.toLowerCase()) {
                     i_val += day_name.length;
                     break;
@@ -298,6 +313,6 @@ function parse(val, format) {
     } else if (hh > 11 && ampm == "AM") {
         hh -= 12;
     }
-    var newdate = new Date(year,month - 1,date,hh,mm,ss);
+    const newdate = new Date(year,month - 1,date,hh,mm,ss);
     return newdate.getTime();
 }

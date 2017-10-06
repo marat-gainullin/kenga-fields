@@ -1,36 +1,34 @@
-define([
-    'core/extend',
-    './box-field'], function (
-        extend,
-        BoxField) {
-    function FormattedField(shell) {
-        var box = document.createElement('input');
+import BoxField from './box-field';
+
+class FormattedField extends BoxField {
+    constructor(shell) {
+        const box = document.createElement('input');
         box.type = 'text';
-        if(!shell)
+        if (!shell)
             shell = box;
-        
-        BoxField.call(this, box, shell);
-        var self = this;
-        var value = null;
+
+        super(box, shell);
+        const self = this;
+        let value = null;
 
         function textChanged() {
-            var oldValue = value;
+            const oldValue = value;
             value = self.onParse ? self.onParse(box.value) : box.value;
             self.fireValueChanged(oldValue);
         }
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function () {
+            get: function() {
                 return textChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function () {
+            get: function() {
                 return box.value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (box.value !== aValue) {
                     box.value = aValue;
                     textChanged();
@@ -39,19 +37,19 @@ define([
         });
 
         Object.defineProperty(this, 'value', {
-            get: function () {
+            get: function() {
                 return value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (value !== aValue) {
-                    var oldValue = value;
+                    const oldValue = value;
                     value = aValue;
-                    box.value = self.onFormat ? self.onFormat(value) : value + '';
+                    box.value = self.onFormat ? self.onFormat(value) : `${value}`;
                     self.fireValueChanged(oldValue);
                 }
             }
         });
     }
-    extend(FormattedField, BoxField);
-    return FormattedField;
-});
+}
+
+export default FormattedField;

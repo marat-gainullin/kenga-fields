@@ -1,21 +1,17 @@
-define([
-    'core/logger',
-    'core/extend',
-    './i18n',
-    './constraint-field'], function (
-        Logger,
-        extend,
-        i18n,
-        ConstraintField) {
-    function ProgressField(box, shell) {
+import Logger from 'core/logger';
+import i18n from './i18n';
+import ConstraintField from './constraint-field';
+
+class ProgressField extends ConstraintField {
+    constructor(box, shell) {
         if (!box)
             box = document.createElement('progress');
         if (!shell) {
             shell = box;
         }
 
-        ConstraintField.call(this, box, shell);
-        var self = this;
+        super(box, shell);
+        const self = this;
         box.classList.add('p-indeterminate');
 
         function checkNullClasses() {
@@ -28,8 +24,9 @@ define([
         }
 
         var value = null;
+
         function progressValueChanged() {
-            var oldValue = value;
+            const oldValue = value;
             value = box.value;
             if (value !== oldValue) {
                 checkNullClasses();
@@ -39,23 +36,23 @@ define([
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function () {
+            get: function() {
                 return progressValueChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function () {
-                return value === null ? '' : value + '';
+            get: function() {
+                return value === null ? '' : `${value}`;
             },
-            set: function (aValue) {
-                var oldValue = value;
+            set: function(aValue) {
+                const oldValue = value;
                 if (!aValue) { // '', or even null
                     value = null;
                 } else {
-                    var parsed = parseFloat(aValue);
+                    const parsed = parseFloat(aValue);
                     if (isNaN(parsed)) {
-                        self.error = i18n['not.a.number'] + '(' + aValue + ')';
+                        self.error = `${i18n['not.a.number']}(${aValue})`;
                     } else {
                         value = parsed;
                     }
@@ -68,12 +65,12 @@ define([
         });
 
         Object.defineProperty(this, 'value', {
-            get: function () {
+            get: function() {
                 return value;
             },
-            set: function (aValue) {
+            set: function(aValue) {
                 if (value !== aValue) {
-                    var oldValue = value;
+                    const oldValue = value;
                     try {
                         box.value = aValue != null ? aValue : 0;
                         value = aValue;
@@ -86,6 +83,6 @@ define([
             }
         });
     }
-    extend(ProgressField, ConstraintField);
-    return ProgressField;
-});
+}
+
+export default ProgressField;
