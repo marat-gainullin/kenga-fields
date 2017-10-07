@@ -8,7 +8,6 @@ class UrlField extends TextField {
             shell = box;
 
         super('', box, shell);
-        const self = this;
     }
 }
 

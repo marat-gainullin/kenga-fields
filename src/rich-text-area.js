@@ -1,8 +1,11 @@
-import i18n from './rich-text-area/i18n';
-import Ui from 'ui/utils';
-import Invoke from 'core/invoke';
-import Widget from 'ui/widget';
-import ValueChangeEvent from 'ui/events/value-change-event';
+import './rich-text-area/layout.css';
+import './rich-text-area/theme.css';
+
+import Invoke from 'septima-utils/invoke';
+import Ui from 'kenga/utils';
+import Widget from 'kenga/widget';
+import ValueChangeEvent from 'kenga/events/value-change-event';
+import i18n from './rich-text-area/rta-i18n';
 
 class RichTextArea extends Widget {
     constructor(shell) {

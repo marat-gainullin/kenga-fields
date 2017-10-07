@@ -1,4 +1,4 @@
-import BoxField from './box-field';
+import BoxField from 'kenga/box-field';
 
 class TextField extends BoxField {
     constructor(text, box, shell) {

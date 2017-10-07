@@ -1,5 +1,5 @@
 import i18n from './i18n';
-import BoxField from './box-field';
+import BoxField from 'kenga/box-field';
 
 class DateTimeField extends BoxField {
     constructor(shell) {

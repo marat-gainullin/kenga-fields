@@ -1,12 +1,12 @@
 {
   "name": "kenga-fields",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Kenga input widgets.",
   "main": "index.js",
   "repository": "https://github.com/marat-gainullin/kenga-fields.git",
   "author": "marat-gainullin <mg@altsoft.biz>",
   "license": "BSD-3-Clause",
-  "private": false
+  "private": false,
   "scripts": {
     "test": "karma start karma.conf.js"
   },
@@ -22,7 +22,6 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-clean": "^0.3.2",
-    "gulp-clean-css": "^3.9.0",
     "gulp-concat": "^2.6.1",
     "gulp-if": "^2.0.2",
     "gulp-jshint": "^2.0.4",
@@ -40,5 +39,9 @@
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.9.0",
     "yargs": "^9.0.1"
+  },
+  "dependencies": {
+    "kenga": "^0.0.8",
+    "septima-utils": "^0.0.4"
   }
 }

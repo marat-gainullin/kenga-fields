@@ -1,4 +1,4 @@
-import Logger from 'core/logger';
+import Logger from 'septima-utils/logger';
 import i18n from './i18n';
 import ConstraintField from './constraint-field';
 

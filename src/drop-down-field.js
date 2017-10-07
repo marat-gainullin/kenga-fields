@@ -1,8 +1,8 @@
-import Invoke from 'core/invoke';
-import Logger from 'core/logger';
+import Invoke from 'septima-utils/invoke';
+import Logger from 'septima-utils/logger';
+import BoxField from 'kenga/box-field';
+import SelectionEvent from 'kenga/events/item-event';
 import i18n from './i18n';
-import SelectionEvent from 'ui/events/item-event';
-import BoxField from './box-field';
 
 class DropDownField extends BoxField {
     constructor(shell) {

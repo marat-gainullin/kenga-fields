@@ -1,5 +1,5 @@
-import Color from 'ui/color';
-import BoxField from './box-field';
+import Color from 'kenga/color';
+import BoxField from 'kenga/box-field';
 
 class ColorField extends BoxField {
     constructor(shell) {

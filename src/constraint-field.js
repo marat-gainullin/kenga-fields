@@ -1,4 +1,4 @@
-import BoxField from './box-field';
+import BoxField from 'kenga/box-field';
 
 class ConstraintField extends BoxField {
     constructor(box, shell) {
@@ -10,7 +10,6 @@ class ConstraintField extends BoxField {
             shell = box;
         }
         super(box, shell);
-        const self = this;
 
         Object.defineProperty(this, 'minimum', {
             get: function() {
