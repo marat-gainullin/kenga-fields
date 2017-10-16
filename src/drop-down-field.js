@@ -46,26 +46,26 @@ class DropDownField extends BoxField {
             self.fireValueChanged(oldValue);
         }
 
-        const selectionHandlers = new Set();
+        const selectHandlers = new Set();
 
-        function addSelectionHandler(handler) {
-            selectionHandlers.add(handler);
+        function addSelectHandler(handler) {
+            selectHandlers.add(handler);
             return {
                 removeHandler: function() {
-                    selectionHandlers.delete(handler);
+                    selectHandlers.delete(handler);
                 }
             };
         }
 
-        Object.defineProperty(this, 'addSelectionHandler', {
+        Object.defineProperty(this, 'addSelectHandler', {
             get: function() {
-                return addSelectionHandler;
+                return addSelectHandler;
             }
         });
 
         function fireSelected(aItem) {
             const event = new SelectionEvent(self, aItem);
-            selectionHandlers.forEach(h => {
+            selectHandlers.forEach(h => {
                 Invoke.later(() => {
                     h(event);
                 });
@@ -151,7 +151,7 @@ class DropDownField extends BoxField {
             }
         }
 
-        Object.defineProperty(this, "emptyText", {
+        Object.defineProperty(this, 'emptyText', {
             configurable: true,
             get: function() {
                 return nullItem.innerText;

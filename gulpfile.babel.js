@@ -50,13 +50,13 @@ gulp.task('lint', () => {
 });
 
 // Process scripts
-gulp.task('transpile', ['clean'], () => gulp.src(masks.scripts, {cwd: paths.src})
+gulp.task('babel', ['clean'], () => gulp.src(masks.scripts, {cwd: paths.src})
             .pipe(babel({
                 presets: ['env']
             }))
             .pipe(gulp.dest(paths.lib)));
 
-gulp.task('js', ['lint', 'transpile'], () => {
+gulp.task('code', ['lint', 'babel'], () => {
 });
 // Process styles, gif images, etc
 gulp.task('assets', ['clean'], () => gulp.src([masks.styles, masks.gifs, masks.pngs], {cwd: paths.src})
@@ -123,7 +123,7 @@ gulp.task('package', ['index'], () => gulp.src([
         'LICENSE', 'package.json'], {cwd: paths.project})
             .pipe(filterPackageJson(pkg))
             .pipe(gulp.dest(paths.lib)));
-gulp.task('build', ['js', 'assets', 'package'], () => {
+gulp.task('build', ['code', 'assets', 'package'], () => {
 });
 
 gulp.task('bundle-src', ['clean'], () => {

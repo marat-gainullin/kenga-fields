@@ -1,6 +1,3 @@
-import './rich-text-area/layout.css';
-import './rich-text-area/theme.css';
-
 import Invoke from 'septima-utils/invoke';
 import Ui from 'kenga/utils';
 import Widget from 'kenga/widget';
@@ -65,14 +62,14 @@ class RichTextArea extends Widget {
         function on(target, event, handler) {
             Ui.on(target, event, e => {
                 handler(e);
-                self.fireActionPerformed();
+                self.fireAction();
                 self.fireValueChanged(wasValue);
             });
         }
 
         Ui.on(content, Ui.Events.BLUR, e => {
             if (wasValue !== self.value) {
-                self.fireActionPerformed();
+                self.fireAction();
                 self.fireValueChanged(wasValue);
             }
         });
@@ -230,7 +227,7 @@ class RichTextArea extends Widget {
             const url = prompt(i18n['rich.text.insert.image.prompt'], "http://");
             if (url) {
                 document.execCommand('insertImage', null, url);
-                self.fireActionPerformed();
+                self.fireAction();
                 self.fireValueChanged(wasValue);
             }
         });
@@ -242,7 +239,7 @@ class RichTextArea extends Widget {
             Ui.selectFile(selectedFile => {
                 upload(selectedFile, uploaded => {
                     document.execCommand('insertImage', null, uploaded[0]);
-                    self.fireActionPerformed();
+                    self.fireAction();
                     self.fireValueChanged(wasValue);
                 });
             }, null);
@@ -256,7 +253,7 @@ class RichTextArea extends Widget {
             const url = prompt(i18n['rich.text.create.link.prompt'], "http://");
             if (url) {
                 document.execCommand('createLink', null, url);
-                self.fireActionPerformed();
+                self.fireAction();
                 self.fireValueChanged(wasValue);
             }
         });
@@ -283,7 +280,7 @@ class RichTextArea extends Widget {
         Ui.on(btnBackground, Ui.Events.CLICK, () => {
             Ui.selectColor(selectedColor => {
                 document.execCommand('backColor', null, selectedColor);
-                self.fireActionPerformed();
+                self.fireAction();
                 self.fireValueChanged(wasValue);
             }, null);
         });
@@ -294,7 +291,7 @@ class RichTextArea extends Widget {
         Ui.on(btnForeground, Ui.Events.CLICK, () => {
             Ui.selectColor(selectedColor => {
                 document.execCommand('foreColor', null, selectedColor);
-                self.fireActionPerformed();
+                self.fireAction();
                 self.fireValueChanged(wasValue);
             }, null);
         });

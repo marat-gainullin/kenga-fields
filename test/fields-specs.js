@@ -2,6 +2,8 @@
 /* global NaN */
 import '../src/layout.css';
 import '../src/theme.css';
+import '../src/rich-text-area/layout.css';
+import '../src/rich-text-area/theme.css';
 
 import Logger from 'septima-utils/logger';
 import Invoke from 'septima-utils/invoke';
@@ -78,38 +80,36 @@ function expectWidget(widget) {
     expect(typeof widget.focus).toEqual('function');
     widget.focus();
 
-    expect('onShown' in widget).toBeTruthy();
-    expectValue(widget, 'onShown', () => {});
-    expect('onHidden' in widget).toBeTruthy();
-    expectValue(widget, 'onHidden', () => {});
-    expect('onMouseDragged' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseDragged', () => {});
-    expect('onMouseReleased' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseReleased', () => {});
+    expect('onShow' in widget).toBeTruthy();
+    expectValue(widget, 'onShow', () => {});
+    expect('onHide' in widget).toBeTruthy();
+    expectValue(widget, 'onHide', () => {});
+    expect('onMouseRelease' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseRelease', () => {});
     expect('onFocusLost' in widget).toBeTruthy();
     expectValue(widget, 'onFocusLost', () => {});
-    expect('onMousePressed' in widget).toBeTruthy();
-    expectValue(widget, 'onMousePressed', () => {});
-    expect('onMouseEntered' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseEntered', () => {});
-    expect('onMouseMoved' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseMoved', () => {});
-    expect('onActionPerformed' in widget).toBeTruthy();
-    expectValue(widget, 'onActionPerformed', () => {});
-    expect('onKeyReleased' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyReleased', () => {});
-    expect('onKeyTyped' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyTyped', () => {});
-    expect('onMouseWheelMoved' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseWheelMoved', () => {});
-    expect('onFocusGained' in widget).toBeTruthy();
-    expectValue(widget, 'onFocusGained', () => {});
-    expect('onMouseClicked' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseClicked', () => {});
-    expect('onMouseExited' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseExited', () => {});
-    expect('onKeyPressed' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyPressed', () => {});
+    expect('onMousePress' in widget).toBeTruthy();
+    expectValue(widget, 'onMousePress', () => {});
+    expect('onMouseEnter' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseEnter', () => {});
+    expect('onMouseMove' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseMove', () => {});
+    expect('onAction' in widget).toBeTruthy();
+    expectValue(widget, 'onAction', () => {});
+    expect('onKeyRelease' in widget).toBeTruthy();
+    expectValue(widget, 'onKeyRelease', () => {});
+    expect('onKeyType' in widget).toBeTruthy();
+    expectValue(widget, 'onKeyType', () => {});
+    expect('onMouseWheelMove' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseWheelMove', () => {});
+    expect('onFocus' in widget).toBeTruthy();
+    expectValue(widget, 'onFocus', () => {});
+    expect('onMouseClick' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseClick', () => {});
+    expect('onMouseExit' in widget).toBeTruthy();
+    expectValue(widget, 'onMouseExit', () => {});
+    expect('onKeyPress' in widget).toBeTruthy();
+    expectValue(widget, 'onKeyPress', () => {});
 }
     function expectTypedField(TypedField) {
         const instance = new TypedField();
@@ -121,7 +121,7 @@ function expectWidget(widget) {
         const instance = new TypedField();
         document.body.appendChild(instance.element);
         expect(instance.element.type).not.toEqual('');
-        instance.onActionPerformed = evt => {
+        instance.onAction = evt => {
             Logger.info(`Action performed on ${evt.source.constructor.name}`);
         };
         instance.onValueChange = evt => {
@@ -159,7 +159,7 @@ function expectWidget(widget) {
         const textField = new TextField();
         document.body.appendChild(textField.element);
         textField.text = 'Sample text';
-        textField.onActionPerformed = () => {
+        textField.onAction = () => {
             Logger.info('TextField action');
         };
         textField.onValueChange = evt => {
@@ -578,10 +578,10 @@ function expectWidget(widget) {
 
         instance.emptyText = 'Select an item please';
         expect(instance.text).toEqual('Select an item please');
-        instance.onActionPerformed = () => {
+        instance.onAction = () => {
             Logger.info(`Action performed on ${instance.constructor.name}`);
         };
-        instance.onItemSelected = evt => {
+        instance.onSelect = evt => {
             Logger.info(`Item selected on ${instance.constructor.name}; item: ${evt.item}`);
         };
         instance.onValueChange = evt => {
@@ -612,7 +612,7 @@ function expectWidget(widget) {
         const instance = new RichTextArea();
         document.body.appendChild(instance.element);
 
-        instance.onActionPerformed = () => {
+        instance.onAction = () => {
             Logger.info(`Action performed on ${instance.constructor.name}`);
         };
         instance.onValueChange = evt => {

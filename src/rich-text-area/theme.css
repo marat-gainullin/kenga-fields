@@ -7,122 +7,122 @@
     line-height: 30px;
 }
 
-.p-rich-text-tool{
+.p-rich-text-tool {
     width: 25px;
     height: 25px;
     background-position: center;
     vertical-align: middle;
 }
 
-.p-rich-text-bold{
+.p-rich-text-bold {
     background-image: url(bold.gif);
 }
-.p-rich-text-italic{
+.p-rich-text-italic {
     background-image: url(italic.gif);
 }
-.p-rich-text-underline{
+.p-rich-text-underline {
     background-image: url(underline.gif);
 }
-.p-rich-text-strike-through{
+.p-rich-text-strike-through {
     background-image: url(strike-through.gif);
     margin-right: 20px;
 }
 
-.p-rich-text-subscript{
+.p-rich-text-subscript {
     background-image: url(subscript.gif);
 }
-.p-rich-text-superscript{
+.p-rich-text-superscript {
     background-image: url(superscript.gif);
     margin-right: 20px;
 }
 
-.p-rich-text-align-left{
+.p-rich-text-align-left {
     background-image: url(align-left.png);
 }
-.p-rich-text-align-center{
+.p-rich-text-align-center {
     background-image: url(align-center.png);
 }
-.p-rich-text-align-right{
+.p-rich-text-align-right {
     background-image: url(align-right.png);
 }
-.p-rich-text-align-full{
+.p-rich-text-align-full {
     background-image: url(align-full.png);
     margin-right: 20px;
 }
 
-.p-rich-text-cut{
+.p-rich-text-cut {
     background-image: url(cut.png);
 }
-.p-rich-text-copy{
+.p-rich-text-copy {
     background-image: url(copy.png);
 }
-.p-rich-text-paste{
+.p-rich-text-paste {
     background-image: url(paste.png);
     margin-right: 20px;
 }
 
-.p-rich-text-undo{
+.p-rich-text-undo {
     background-image: url(undo.png);
 }
-.p-rich-text-redo{
+.p-rich-text-redo {
     background-image: url(redo.png);
     margin-right: 20px;
 }
 
-.p-rich-text-indent-right{
+.p-rich-text-indent-right {
     background-image: url(indent-right.gif);
 }
-.p-rich-text-indent-left{
+.p-rich-text-indent-left {
     background-image: url(indent-left.gif);
     margin-right: 20px;
 }
 
-.p-rich-text-horizontal-rule{
+.p-rich-text-horizontal-rule {
     background-image: url(horizontal-rule.gif);
     margin-right: 20px;
 }
 
-.p-rich-text-ordered-list{
+.p-rich-text-ordered-list {
     background-image: url(ordered-list.gif);
 }
-.p-rich-text-unordered-list{
+.p-rich-text-unordered-list {
     background-image: url(unordered-list.gif);
     margin-right: 20px;
 }
 
-.p-rich-text-insert-image{
+.p-rich-text-insert-image {
     background-image: url(insert-image.gif);
 }
-.p-rich-text-upload-image{
+.p-rich-text-upload-image {
     background-image: url(upload-image.png);
     margin-right: 20px;
 }
 
-.p-rich-text-create-link{
+.p-rich-text-create-link {
     background-image: url(create-link.gif);
 }
-.p-rich-text-remove-link{
+.p-rich-text-remove-link {
     background-image: url(remove-link.gif);
     margin-right: 20px;
 }
 
-.p-rich-text-clear-format{
+.p-rich-text-clear-format {
     background-image: url(clear-format.gif);
     margin-right: 20px;
 }
 
-.p-rich-text-background{
+.p-rich-text-background {
     background-image: url(background.gif);
 }
-.p-rich-text-foreground{
+.p-rich-text-foreground {
     background-image: url(foreground.gif);
     margin-right: 20px;
 }
 
-.p-rich-text-font-name{
+.p-rich-text-font-name {
     width: 150px;
     margin-right: 2px;
 }
-.p-rich-text-font-size{
+.p-rich-text-font-size {
     width: 150px;
 }
