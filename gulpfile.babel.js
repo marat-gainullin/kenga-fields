@@ -43,7 +43,7 @@ gulp.task('clean', () => gulp.src(paths.build)
             .pipe(clean()));
 
 // Lint JS
-gulp.task('lint', () => {
+gulp.task('jshint', () => {
     return gulp.src(masks.scripts, {cwd: paths.src})
             .pipe(jshint())
             .pipe(jshint.reporter('default'));
@@ -56,7 +56,7 @@ gulp.task('babel', ['clean'], () => gulp.src(masks.scripts, {cwd: paths.src})
             }))
             .pipe(gulp.dest(paths.lib)));
 
-gulp.task('code', ['lint', 'babel'], () => {
+gulp.task('code', ['jshint', 'babel'], () => {
 });
 // Process styles, gif images, etc
 gulp.task('assets', ['clean'], () => gulp.src([masks.styles, masks.gifs, masks.pngs], {cwd: paths.src})
@@ -123,7 +123,7 @@ gulp.task('package', ['index'], () => gulp.src([
         'LICENSE', 'package.json'], {cwd: paths.project})
             .pipe(filterPackageJson(pkg))
             .pipe(gulp.dest(paths.lib)));
-gulp.task('build', ['code', 'assets', 'package'], () => {
+gulp.task('lib', ['code', 'assets', 'package'], () => {
 });
 
 gulp.task('bundle-src', ['clean'], () => {
@@ -162,4 +162,4 @@ gulp.task('bundle', ['generate-bundle'], () => gulp.src(`${paths.bundle}src`)
             .pipe(clean()));
 
 // Define the default task as a sequence of the above tasks
-gulp.task('default', ['build']);
+gulp.task('default', ['lib']);

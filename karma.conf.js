@@ -27,6 +27,7 @@ module.exports = function (config) {
         },
         browserify: {
             debug: true,
+            extensions: ['.js'],
             bundleDelay: 1000,
             transform: [
                 [
@@ -40,9 +41,11 @@ module.exports = function (config) {
                     }
                 ]
                 ,['browserify-babel-istanbul']
-            ],
-            extensions: ['.js']
+            ]
         },
+        // Continuous Integration mode
+        // if true, Karma captures browsers, runs the tests and exits
+        singleRun: true,
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
@@ -72,9 +75,6 @@ module.exports = function (config) {
         browsers: ['Chrome'],
         // Concurrency level
         // how many browser should be started simultaneous
-        concurrency: Infinity,
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        singleRun: true
+        concurrency: Infinity
     });
 };
