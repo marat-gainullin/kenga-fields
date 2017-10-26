@@ -126,40 +126,5 @@ gulp.task('package', ['index'], () => gulp.src([
 gulp.task('lib', ['code', 'assets', 'package'], () => {
 });
 
-gulp.task('bundle-src', ['clean'], () => {
-    return gulp.src([masks.scripts, masks.styles, masks.gifs, masks.pngs], {cwd: paths.src})
-            .pipe(gulp.dest(`${paths.bundle}src`));
-});
-gulp.task('bundle-index', ['clean'], () => {
-    return gulp.src([masks.scripts], {cwd: paths.src})
-            .pipe(indexFrom(process.cwd() + paths.src))
-            .pipe(gulpConcat(pkg.main, {newLine: ';\n'}))
-            .pipe(importsToIndex(['./layout.css', './theme.css']))
-            .pipe(gulp.dest(`${paths.bundle}src`));
-});
-
-gulp.task('generate-bundle', ['bundle-index', 'bundle-src'], () => {
-    return browserify(`${paths.bundle}src/${pkg.main}`,
-            {
-                debug: !!argv.dev // source map generation
-            })
-            .transform('babelify', {
-                presets: 'env'
-            })
-            .transform('browserify-css', {
-                minify: true,
-                inlineImages: true
-            })
-            .bundle()
-            .pipe(vinylStream(`${pkg.name}.js`))
-            .pipe(vinylBuffer())
-            .pipe(gulpif(!!argv.dev, sourcemaps.init({loadMaps: true})))
-            .pipe(gulpif(!!!argv.dev, uglify()))
-            .pipe(gulpif(!!argv.dev, sourcemaps.write('.')))
-            .pipe(gulp.dest(paths.bundle));
-});
-gulp.task('bundle', ['generate-bundle'], () => gulp.src(`${paths.bundle}src`)
-            .pipe(clean()));
-
 // Define the default task as a sequence of the above tasks
 gulp.task('default', ['lib']);
