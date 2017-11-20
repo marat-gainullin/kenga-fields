@@ -1,6 +1,6 @@
 {
   "name": "kenga-fields",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Kenga input widgets.",
   "main": "index.js",
   "repository": "https://github.com/marat-gainullin/kenga-fields.git",
@@ -41,7 +41,7 @@
     "yargs": "^9.0.1"
   },
   "dependencies": {
-    "kenga": "^0.0.9",
+    "kenga": "^0.0.10",
     "septima-utils": "^0.0.4"
   }
 }
