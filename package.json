@@ -1,6 +1,6 @@
 {
   "name": "kenga-fields",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Kenga input widgets.",
   "main": "index.js",
   "repository": "https://github.com/marat-gainullin/kenga-fields.git",
