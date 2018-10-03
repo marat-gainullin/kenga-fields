@@ -42,6 +42,6 @@
   },
   "dependencies": {
     "kenga": "0.0.38",
-    "septima-utils": "0.0.5"
+    "septima-utils": "0.0.6"
   }
 }
