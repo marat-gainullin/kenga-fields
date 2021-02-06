@@ -1,4 +1,4 @@
-@import 'node_modules/kenga/theme.css';
+@import 'kenga/theme.css';
 
 .p-error-popup {
     border: 1px solid lightgrey;

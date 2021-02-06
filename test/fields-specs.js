@@ -237,7 +237,7 @@ function expectWidget(widget) {
         expect(instance.text).toEqual('');
         expect(instance.value).toBe(null);
 
-        const moment = new Date('2017-04-23T01:07:00.068Z');
+        const moment = new Date();
         let localMoment = new Date(-moment.getTimezoneOffset() * 60000 + moment.valueOf()).toJSON(); // local version of moment
         localMoment = localMoment.substring(0, localMoment.length - 1);
         instance.text = localMoment;
