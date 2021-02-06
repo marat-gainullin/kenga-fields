@@ -23,7 +23,13 @@ const config = {
             plugins: [["@babel/plugin-transform-runtime", {}]]
         }),
         copy({
-            targets: [{src: 'src/**/*.css', dest: destDir}, {src: 'package.json', dest: destDir}]
+            targets: [
+                {src: 'src/*.css', dest: destDir},
+                {src: 'src/rich-text-area/*.css', dest: `${destDir}/rich-text-area`},
+                {src: 'src/rich-text-area/*.gif', dest: `${destDir}/rich-text-area`},
+                {src: 'src/rich-text-area/*.png', dest: `${destDir}/rich-text-area`},
+                {src: 'package.json', dest: destDir}
+            ]
         })
     ]
 };
