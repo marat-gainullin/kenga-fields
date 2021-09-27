@@ -19,22 +19,34 @@ class TextField extends BoxField {
 
         function textChanged() {
             const oldValue = value;
-            value = box.value === '' ? null : box.value;
-            self.fireValueChanged(oldValue);
+            if (box.value !== '') {
+                if (self.checkValidity) {
+                    if (self.checkValidity()) {
+                        value = box.value;
+                    }// else leave value as is
+                } else {
+                    value = box.value
+                }
+            } else {
+                value = null;
+            }
+            if (value !== oldValue) {
+                self.fireValueChanged(oldValue);
+            }
         }
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function() {
+            get: function () {
                 return textChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function() {
+            get: function () {
                 return box.value;
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 if (box.value !== aValue) {
                     box.value = aValue;
                     textChanged();
@@ -43,10 +55,10 @@ class TextField extends BoxField {
         });
 
         Object.defineProperty(this, 'value', {
-            get: function() {
+            get: function () {
                 return value;
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 const oldValue = value;
                 value = aValue !== undefined ? aValue : null;
                 box.value = value;

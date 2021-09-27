@@ -14,14 +14,20 @@ class NumberField extends ConstraintField {
         const self = this;
         let value = null;
 
+        this.formatError = () => {
+            const message = i18n['not.a.number'];
+            return message ? `${message}(${box.value})` : box.validationMessage;
+        };
+
+        this.checkValidity = () => {
+            return !isNaN(self.parseFloat(box.value));
+        };
+
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                const parsed = parseFloat(box.value);
-                if (isNaN(parsed)) {
-                    self.error = `${i18n['not.a.number']}(${box.value})`;
-                } else {
-                    value = parsed;
+                if (self.checkValidity()) {
+                    value = self.parseFloat(box.value);
                 }
             } else {
                 value = null;

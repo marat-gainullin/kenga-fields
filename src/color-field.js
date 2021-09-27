@@ -13,7 +13,7 @@ class ColorField extends BoxField {
         let value = null;
 
         function format(color) {
-            return color ? color.toString() : '#000000';
+            return color ? color.toString() : '#fff';
         }
 
         function parse(source) {
@@ -21,9 +21,22 @@ class ColorField extends BoxField {
             return parsed ? new Color(parsed.red, parsed.green, parsed.blue, parsed.alpha) : parsed;
         }
 
+        this.parse = parse;
+        this.format = format;
+
+        this.checkValidity = () => {
+            return true;
+        };
+
         function textChanged() {
             const oldValue = value;
-            value = parse(box.value);
+            if (box.value !== '') {
+                if (self.checkValidity()) {
+                    value = self.parse(box.value);
+                }
+            } else {
+                value = null;
+            }
             if (value !== oldValue) {
                 self.fireValueChanged(oldValue);
             }
@@ -56,7 +69,7 @@ class ColorField extends BoxField {
                 if (value !== aValue) {
                     const oldValue = value;
                     value = aValue;
-                    box.value = format(value);
+                    box.value = self.format(value);
                     self.fireValueChanged(oldValue);
                 }
             }

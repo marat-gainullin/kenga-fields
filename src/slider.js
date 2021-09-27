@@ -22,14 +22,20 @@ class RangeField extends ConstraintField {
             }
         }
 
-        function textSourceChanged(aText) {
+        this.formatError = () => {
+            const message = i18n['not.a.number'];
+            return message ? `${message}(${box.value})` : box.validationMessage;
+        };
+
+        this.checkValidity = () => {
+            return !isNaN(parseFloat(box.value));
+        };
+
+        function textChanged() {
             const oldValue = value;
-            if (aText !== '') {
-                const parsed = parseFloat(aText);
-                if (isNaN(parsed)) {
-                    self.error = `${i18n['not.a.number']}(${aText})`;
-                } else {
-                    value = parsed;
+            if (box.value !== '') {
+                if (self.checkValidity()) {
+                    value = parseFloat(box.value);
                 }
             } else {
                 value = null;
@@ -40,18 +46,10 @@ class RangeField extends ConstraintField {
             }
         }
 
-        function boxTextChanged() {
-            textSourceChanged(box.value);
-        }
-
-        function textChanged() {
-            textSourceChanged(text);
-        }
-
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
             get: function() {
-                return boxTextChanged;
+                return textChanged;
             }
         });
 

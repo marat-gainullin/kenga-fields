@@ -1,4 +1,3 @@
-import Logger from 'septima-utils/logger';
 import i18n from './i18n';
 import ConstraintField from './constraint-field';
 
@@ -77,7 +76,7 @@ class ProgressField extends ConstraintField {
                         checkNullClasses();
                         self.fireValueChanged(oldValue);
                     } catch (e) {
-                        Logger.warning(e);
+                        console.warn(e);
                     }
                 }
             }

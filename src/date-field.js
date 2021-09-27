@@ -18,17 +18,26 @@ class DateField extends BoxField {
 
         function format(date) {
             const json = date.toJSON();
-            return json.substring(0, json.length - 'T00:00:00.000Z'.length);
+            return json.substring(0, json.length - 14/*'T00:00:00.000Z'.length*/);
         }
+
+        this.parse = parse;
+        this.format = format;
+
+        this.formatError = () => {
+            const message = i18n['not.a.date'];
+            return message ? `${message}(${box.value})` : box.validationMessage;
+        };
+
+        this.checkValidity = () => {
+            return !isNaN(self.parse(box.value));
+        };
 
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                const parsed = parse(box.value);
-                if (isNaN(parsed.valueOf())) {
-                    self.error = `${i18n['not.a.date']}(${box.value})`;
-                } else {
-                    value = parsed;
+                if (self.checkValidity()) {
+                    value = self.parse(box.value);
                 }
             } else {
                 value = null;
@@ -65,7 +74,7 @@ class DateField extends BoxField {
                 if (value !== aValue) {
                     const oldValue = value;
                     value = aValue;
-                    box.value = value != null ? format(value) : '';
+                    box.value = value != null ? self.format(value) : '';
                     self.fireValueChanged(oldValue);
                 }
             }

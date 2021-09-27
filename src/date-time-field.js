@@ -26,14 +26,23 @@ class DateTimeField extends BoxField {
             }
         }
 
+        this.parse = parse;
+        this.format = format;
+
+        this.formatError = () => {
+            const message = i18n['not.a.datetime'];
+            return message ? `${message}(${box.value})` : box.validationMessage;
+        };
+
+        this.checkValidity = () => {
+            return !isNaN(self.parse(box.value));
+        };
+
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                const parsed = parse(box.value);
-                if (isNaN(parsed.valueOf())) {
-                    self.error = `${i18n['not.a.datetime']}(${box.value})`;
-                } else {
-                    value = parsed;
+                if (self.checkValidity()) {
+                    value = self.parse(box.value);
                 }
             } else {
                 value = null;
@@ -70,7 +79,7 @@ class DateTimeField extends BoxField {
                 if (value !== aValue) {
                     const oldValue = value;
                     value = aValue;
-                    box.value = value != null ? format(value) : '';
+                    box.value = value != null ? self.format(value) : '';
                     self.fireValueChanged(oldValue);
                 }
             }

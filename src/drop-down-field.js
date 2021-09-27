@@ -1,8 +1,6 @@
-import Invoke from 'septima-utils/invoke';
-import Logger from 'septima-utils/logger';
+import Ui from 'kenga/utils';
 import BoxField from 'kenga/box-field';
 import SelectionEvent from 'kenga/events/item-event';
-import i18n from './i18n';
 
 class DropDownField extends BoxField {
     constructor(shell) {
@@ -66,7 +64,7 @@ class DropDownField extends BoxField {
         function fireSelected(aItem) {
             const event = new SelectionEvent(self, aItem);
             selectHandlers.forEach(h => {
-                Invoke.later(() => {
+                Ui.later(() => {
                     h(event);
                 });
             });
@@ -229,7 +227,7 @@ class DropDownField extends BoxField {
         function removeValue(aValue) {
             const index = indexOfValue(aValue);
             const removed = removeItem(index);
-            return removed ? true : false;
+            return !!removed;
         }
 
         Object.defineProperty(this, 'removeValue', {
@@ -254,8 +252,6 @@ class DropDownField extends BoxField {
 
         function addItem(index, aLabel, aValue) {
             if (aValue !== null && index >= 0 && index <= box.options.length) {
-                if (index === 0)
-                    Logger.warning(i18n['null.item.index']);
                 const item = document.createElement('option');
                 item.innerText = aLabel;
                 item['js-value'] = aValue;
