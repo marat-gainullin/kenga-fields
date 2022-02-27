@@ -12,37 +12,20 @@ class DateTimeField extends BoxField {
         const self = this;
         let value = null;
 
-        function parse(source) {
-            return new Date(source);
-        }
-
-        function format(date) {
-            const formatted = new Date(-(new Date()).getTimezoneOffset() * 60000 + date.valueOf()).toJSON();
-            const zi = formatted.indexOf('Z');
-            if (zi > -1) {
-                return formatted.substring(0, zi);
-            } else {
-                return formatted;
-            }
-        }
-
-        this.parse = parse;
-        this.format = format;
-
         this.formatError = () => {
             const message = i18n['not.a.datetime'];
             return message ? `${message}(${box.value})` : box.validationMessage;
         };
 
         this.checkValidity = () => {
-            return !isNaN(self.parse(box.value));
+            return true;
         };
 
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
                 if (self.checkValidity()) {
-                    value = self.parse(box.value);
+                    value = box.valueAsDate;
                 }
             } else {
                 value = null;
@@ -79,7 +62,7 @@ class DateTimeField extends BoxField {
                 if (value !== aValue) {
                     const oldValue = value;
                     value = aValue;
-                    box.value = value != null ? self.format(value) : '';
+                    box.valueAsDate = value;
                     self.fireValueChanged(oldValue);
                 }
             }

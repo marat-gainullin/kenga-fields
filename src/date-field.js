@@ -12,32 +12,20 @@ class DateField extends BoxField {
         const self = this;
         let value = null;
 
-        function parse(source) {
-            return new Date(`${source}T00:00:00.000Z`);
-        }
-
-        function format(date) {
-            const json = date.toJSON();
-            return json.substring(0, json.length - 14/*'T00:00:00.000Z'.length*/);
-        }
-
-        this.parse = parse;
-        this.format = format;
-
         this.formatError = () => {
             const message = i18n['not.a.date'];
             return message ? `${message}(${box.value})` : box.validationMessage;
         };
 
         this.checkValidity = () => {
-            return !isNaN(self.parse(box.value));
+            return true;
         };
 
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
                 if (self.checkValidity()) {
-                    value = self.parse(box.value);
+                    value = box.valueAsDate;
                 }
             } else {
                 value = null;
@@ -49,16 +37,16 @@ class DateField extends BoxField {
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function() {
+            get: function () {
                 return textChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function() {
+            get: function () {
                 return box.value;
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 if (box.value !== aValue) {
                     box.value = aValue;
                     textChanged();
@@ -67,14 +55,16 @@ class DateField extends BoxField {
         });
 
         Object.defineProperty(this, 'value', {
-            get: function() {
-                return value;
+            get: function () {
+                /* Browsers have very strange behaviour here. They treat timezone explicitly. And the value after the .valueAsDate = assignment gets distorted */
+                return box.valueAsDate != null ? new Date(box.valueAsDate.getTime() + box.valueAsDate.getTimezoneOffset() * 60_000) : null;
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 if (value !== aValue) {
                     const oldValue = value;
                     value = aValue;
-                    box.value = value != null ? self.format(value) : '';
+                    /* Browsers have very strange behaviour here. They treat timezone explicitly. And the value after the .valueAsDate = assignment gets distorted */
+                    box.valueAsDate = value != null ? new Date(value.getTime() - value.getTimezoneOffset() * 60_000) : null;
                     self.fireValueChanged(oldValue);
                 }
             }
