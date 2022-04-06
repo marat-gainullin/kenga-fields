@@ -20,14 +20,14 @@ class NumberField extends ConstraintField {
         };
 
         this.checkValidity = () => {
-            return !isNaN(self.parseFloat(box.value));
+            return !isNaN(parseFloat(box.value));
         };
 
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
                 if (self.checkValidity()) {
-                    value = self.parseFloat(box.value);
+                    value = parseFloat(box.value);
                 }
             } else {
                 value = null;
