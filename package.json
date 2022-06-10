@@ -1,17 +1,19 @@
 {
   "name": "kenga-fields",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": "Kenga input widgets.",
   "repository": "https://github.com/marat-gainullin/kenga-fields.git",
   "author": "marat-gainullin <mg@altsoft.biz>",
   "license": "BSD-3-Clause",
   "private": false,
   "scripts": {
+    "clean": "rimraf ./build",
+    "upload": "rimraf ./build & rollup -c rollup.lib.config.js & npm publish ./build/lib",
     "lib": "rollup -c rollup.lib.config.js",
     "test": "rollup -c rollup.test.config.js"
   },
   "dependencies": {
-    "kenga": "0.0.48"
+    "kenga": "0.0.49"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
@@ -23,6 +25,7 @@
     "@rollup/plugin-node-resolve": "^13.0.4",
     "fast-glob": "^3.2.7",
     "jasmine-core": "^3.9.0",
+    "rimraf": "^3.0.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-generate-html-template": "^1.7.0",
     "rollup-plugin-multi-input": "^1.3.1",
