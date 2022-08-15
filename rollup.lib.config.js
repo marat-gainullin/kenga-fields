@@ -24,12 +24,13 @@ const config = {
         }),
         copy({
             targets: [
+                {src: 'src/**/*.d.ts', dest: destDir},
                 {src: 'src/*.css', dest: destDir},
-                {src: 'src/rich-text-area/*.css', dest: `${destDir}/rich-text-area`},
-                {src: 'src/rich-text-area/*.gif', dest: `${destDir}/rich-text-area`},
-                {src: 'src/rich-text-area/*.png', dest: `${destDir}/rich-text-area`},
+                {src: 'src/**/*.gif', dest: destDir},
+                {src: 'src/**/*.png', dest: destDir},
                 {src: 'package.json', dest: destDir}
-            ]
+              ],
+              flatten: false
         })
     ]
 };
