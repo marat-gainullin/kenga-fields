@@ -1,6 +1,6 @@
 {
   "name": "kenga-fields",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "description": "Kenga input widgets.",
   "repository": "https://github.com/marat-gainullin/kenga-fields.git",
   "author": "marat-gainullin <mg@altsoft.biz>",
@@ -13,7 +13,7 @@
     "test": "rollup -c rollup.test.config.js"
   },
   "dependencies": {
-    "kenga": "0.0.52"
+    "kenga": "0.0.53"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",

@@ -9,6 +9,7 @@ class DropDownField extends BoxField {
             shell = box;
         }
         super(box, shell);
+        shell.classList.add('p-drop-down')
 
         const self = this;
         let value = null;

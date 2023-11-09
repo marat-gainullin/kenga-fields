@@ -34,9 +34,7 @@ class RangeField extends ConstraintField {
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                if (self.checkValidity()) {
-                    value = parseFloat(box.value);
-                }
+                value = parseFloat(box.value);
             } else {
                 value = null;
             }

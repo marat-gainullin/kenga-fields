@@ -24,9 +24,7 @@ class DateTimeField extends BoxField {
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                if (self.checkValidity()) {
-                    value = box.valueAsDate;
-                }
+                value = box.valueAsDate;
             } else {
                 value = null;
             }

@@ -41,9 +41,7 @@ class TimeField extends BoxField {
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                if (self.checkValidity()) {
-                    value = self.parse(box.value);
-                }
+                value = self.parse(box.value);
             } else {
                 value = null;
             }

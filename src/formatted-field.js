@@ -14,13 +14,7 @@ class FormattedField extends BoxField {
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                if (self.checkValidity) {
-                    if (self.checkValidity()) {
-                        value = self.parse ? self.parse(box.value) : box.value;
-                    }// else leave value as is
-                } else {
-                    value = box.value
-                }
+              value = self.parse ? self.parse(box.value) : box.value;
             } else {
                 value = null;
             }

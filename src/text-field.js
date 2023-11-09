@@ -20,13 +20,7 @@ class TextField extends BoxField {
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                if (self.checkValidity) {
-                    if (self.checkValidity()) {
-                        value = box.value;
-                    }// else leave value as is
-                } else {
-                    value = box.value
-                }
+                value = box.value;
             } else {
                 value = null;
             }
