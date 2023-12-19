@@ -16,13 +16,21 @@ class TimeField extends BoxField {
             return (new Date(`1970-01-01T${source}Z`)).valueOf();
         }
 
-        function format(time) {
-            const formatted = (new Date(time)).toJSON().substring('1970-01-01T'.length);
-            const zi = formatted.indexOf('Z');
-            if (zi > -1) {
-                return formatted.substring(0, zi);
+        function format(aValue) {
+            if (aValue != null) {
+                const d = new Date(aValue)
+                let textValue = (d.getUTCHours()+'').padStart(2, '0') + ':' + (d.getUTCMinutes()+'').padStart(2, '0');
+                if (box.step != '') {
+                    if (box.step.toLowerCase() == 'any' || Number(box.step) < 60) {
+                      textValue += ':' + (d.getUTCSeconds()+'').padStart(2, '0')
+                    }
+                    if (box.step.toLowerCase() == 'any' || Number(box.step) < 1) {
+                      textValue += '.' + (d.getUTCMilliseconds()+'').padStart(2, '0')
+                    }
+                }
+                return textValue
             } else {
-                return formatted;
+                return ''
             }
         }
 

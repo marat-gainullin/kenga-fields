@@ -24,7 +24,7 @@ class DateTimeField extends BoxField {
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                value = box.valueAsDate;
+                value = new Date(box.value);
             } else {
                 value = null;
             }
@@ -60,7 +60,20 @@ class DateTimeField extends BoxField {
                 if (value !== aValue) {
                     const oldValue = value;
                     value = aValue;
-                    box.valueAsDate = value;
+                    if (aValue != null) {
+                        let textValue = (aValue.getFullYear()+'').padStart(2, '0') + '-' + ((aValue.getMonth() + 1)+'').padStart(2, '0') + '-' + (aValue.getDate()+'').padStart(2, '0') + 'T' + (aValue.getHours()+'').padStart(2, '0') + ':' + (aValue.getMinutes()+'').padStart(2, '0');
+                        if (box.step != '') {
+                            if (box.step.toLowerCase() == 'any' || Number(box.step) < 60) {
+                              textValue += ':' + (aValue.getSeconds()+'').padStart(2, '0')
+                            }
+                            if (box.step.toLowerCase() == 'any' || Number(box.step) < 1) {
+                              textValue += '.' + (aValue.getMilliseconds()+'').padStart(2, '0')
+                            }
+                        }
+                        box.value = textValue
+                    } else {
+                        box.value = ''
+                    }
                     self.fireValueChanged(oldValue);
                 }
             }
