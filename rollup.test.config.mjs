@@ -11,7 +11,7 @@ const srcDir = 'src';
 const testDir = 'test';
 const buildDir = 'build';
 
-const config = {
+export default args => ({
     input: `${testDir}/fields-specs.js`,
     output: {
         file: `${buildDir}/fields-specs.js`,
@@ -35,6 +35,4 @@ const config = {
             }
         }
     ]
-};
-
-export default config;
+});

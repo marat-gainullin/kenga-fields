@@ -1,4 +1,3 @@
-import i18n from './i18n';
 import ConstraintField from './constraint-field';
 
 class ProgressField extends ConstraintField {
@@ -24,60 +23,54 @@ class ProgressField extends ConstraintField {
 
         var value = null;
 
-        function progressValueChanged() {
+        function textChanged() {
             const oldValue = value;
             value = box.value;
+            checkNullClasses();
             if (value !== oldValue) {
-                checkNullClasses();
                 self.fireValueChanged(oldValue);
             }
         }
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function() {
-                return progressValueChanged;
+            get: function () {
+                return textChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function() {
-                return value === null ? '' : `${value}`;
+            get: function () {
+                return value == null ? '' : box.value + '';
             },
-            set: function(aValue) {
-                const oldValue = value;
-                if (!aValue) { // '', or even null
-                    value = null;
-                } else {
-                    const parsed = parseFloat(aValue);
-                    if (isNaN(parsed)) {
-                        self.error = `${i18n['not.a.number']}(${aValue})`;
+            set: function (aValue) {
+                if (box.value !== aValue) {
+                    if (aValue == '') {
+                        self.value = null
                     } else {
-                        value = parsed;
+                        const parsed = parseFloat(aValue);
+                        if (isNaN(parsed)) {
+                            self.value = null
+                        } else {
+                            box.value = parsed;
+                            textChanged();
+                        }
                     }
-                }
-                if (value !== oldValue) {
-                    checkNullClasses();
-                    self.fireValueChanged(oldValue);
                 }
             }
         });
 
         Object.defineProperty(this, 'value', {
-            get: function() {
+            get: function () {
                 return value;
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 if (value !== aValue) {
                     const oldValue = value;
-                    try {
-                        box.value = aValue != null ? aValue : 0;
-                        value = aValue;
-                        checkNullClasses();
-                        self.fireValueChanged(oldValue);
-                    } catch (e) {
-                        console.warn(e);
-                    }
+                    box.value = aValue != null ? aValue : 0;
+                    value = aValue;
+                    checkNullClasses();
+                    self.fireValueChanged(oldValue);
                 }
             }
         });

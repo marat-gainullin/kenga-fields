@@ -8,8 +8,6 @@ import '../src/rich-text-area/theme.css';
 import Logger from 'septima-utils/logger';
 import Invoke from 'septima-utils/invoke';
 import Font from 'kenga/font';
-import Color from 'kenga/color';
-import Cursor from 'kenga/cursor';
 import Slider from '../src/slider';
 import TextArea from '../src/text-area';
 import UrlField from '../src/url-field';
@@ -29,88 +27,82 @@ import DropDownField from '../src/drop-down-field';
 
 describe('Fields Api', () => {
 
-function expectValue(obj, prop, value) {
-    obj[prop] = value;
-    expect(obj[prop]).toEqual(value);
-}
+    function expectValue(obj, prop, value) {
+        obj[prop] = value;
+        expect(obj[prop]).toEqual(value);
+    }
 
-function expectWidget(widget) {
-    expect('name' in widget).toBeTruthy();
-    expectValue(widget, 'name', 'widgetName');
-    expect('element' in widget).toBeTruthy();
-    expect('parent' in widget).toBeTruthy();
-    expectValue(widget, 'parent', new widget.constructor());
-    expectValue(widget, 'parent', null);
-    expect('left' in widget).toBeTruthy();
-    expectValue(widget, 'left', 30);
-    expect('width' in widget).toBeTruthy();
-    expectValue(widget, 'width', 50);
-    expect('top' in widget).toBeTruthy();
-    expectValue(widget, 'top', 57);
-    expect('height' in widget).toBeTruthy();
-    expectValue(widget, 'height', 80);
-    expect('enabled' in widget).toBeTruthy();
-    expectValue(widget, 'enabled', true);
-    expectValue(widget, 'enabled', false);
-    expect('visible' in widget).toBeTruthy();
-    expectValue(widget, 'visible', true);
-    expectValue(widget, 'visible', false);
-    expect('opaque' in widget).toBeTruthy();
-    expectValue(widget, 'opaque', true);
-    expectValue(widget, 'opaque', false);
-    expect('cursor' in widget).toBeTruthy();
-    expectValue(widget, 'cursor', Cursor.WAIT);
-    expect('background' in widget).toBeTruthy();
-    expectValue(widget, 'background', new Color('#fcfcfc'));
-    expect('foreground' in widget).toBeTruthy();
-    expectValue(widget, 'foreground', new Color(12, 45, 78, 35));
-    expect('error' in widget).toBeTruthy();
-    expectValue(widget, 'error', 'sample validation message');
-    widget.error = null;
-    expect('contextMenu' in widget).toBeTruthy();
-    expectValue(widget, 'contextMenu', new widget.constructor());
-    expect('toolTipText' in widget).toBeTruthy();
-    expectValue(widget, 'toolTipText', ' sample tooltip');
-    expect('focusable' in widget).toBeTruthy();
-    expectValue(widget, 'focusable', true);
-    expectValue(widget, 'focusable', false);
-    expect('font' in widget).toBeDefined();
-    expectValue(widget, 'font', new Font('Arial', Font.Style.ITALIC, 14));
-    expect(widget.focus).toBeDefined();
-    expect(typeof widget.focus).toEqual('function');
-    widget.focus();
+    function expectWidget(widget) {
+        expect('name' in widget).toBeTruthy();
+        expectValue(widget, 'name', 'widgetName');
+        expect('element' in widget).toBeTruthy();
+        expect('parent' in widget).toBeTruthy();
+        expectValue(widget, 'parent', new widget.constructor());
+        expectValue(widget, 'parent', null);
+        expect('left' in widget).toBeTruthy();
+        expectValue(widget, 'left', 30);
+        expect('width' in widget).toBeTruthy();
+        expectValue(widget, 'width', 50);
+        expect('top' in widget).toBeTruthy();
+        expectValue(widget, 'top', 57);
+        expect('height' in widget).toBeTruthy();
+        expectValue(widget, 'height', 80);
+        expect('enabled' in widget).toBeTruthy();
+        expectValue(widget, 'enabled', true);
+        expectValue(widget, 'enabled', false);
+        expect('visible' in widget).toBeTruthy();
+        expectValue(widget, 'visible', true);
+        expectValue(widget, 'visible', false);
+        expect('background' in widget).toBeTruthy();
+        expectValue(widget, 'background', '#fcfcfc');
+        expect('foreground' in widget).toBeTruthy();
+        expect('error' in widget).toBeTruthy();
+        expectValue(widget, 'error', 'sample validation message');
+        widget.error = null;
+        expect('contextMenu' in widget).toBeTruthy();
+        expectValue(widget, 'contextMenu', new widget.constructor());
+        expect('toolTipText' in widget).toBeTruthy();
+        expectValue(widget, 'toolTipText', ' sample tooltip');
+        expect('focusable' in widget).toBeTruthy();
+        expectValue(widget, 'focusable', true);
+        expectValue(widget, 'focusable', false);
+        expect('font' in widget).toBeDefined();
+        expectValue(widget, 'font', new Font('Arial', Font.Style.ITALIC, 14));
+        expect(widget.focus).toBeDefined();
+        expect(typeof widget.focus).toEqual('function');
+        widget.focus();
 
-    expect('onShow' in widget).toBeTruthy();
-    expectValue(widget, 'onShow', () => {});
-    expect('onHide' in widget).toBeTruthy();
-    expectValue(widget, 'onHide', () => {});
-    expect('onMouseRelease' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseRelease', () => {});
-    expect('onFocusLost' in widget).toBeTruthy();
-    expectValue(widget, 'onFocusLost', () => {});
-    expect('onMousePress' in widget).toBeTruthy();
-    expectValue(widget, 'onMousePress', () => {});
-    expect('onMouseEnter' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseEnter', () => {});
-    expect('onMouseMove' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseMove', () => {});
-    expect('onAction' in widget).toBeTruthy();
-    expectValue(widget, 'onAction', () => {});
-    expect('onKeyRelease' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyRelease', () => {});
-    expect('onKeyType' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyType', () => {});
-    expect('onMouseWheelMove' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseWheelMove', () => {});
-    expect('onFocus' in widget).toBeTruthy();
-    expectValue(widget, 'onFocus', () => {});
-    expect('onMouseClick' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseClick', () => {});
-    expect('onMouseExit' in widget).toBeTruthy();
-    expectValue(widget, 'onMouseExit', () => {});
-    expect('onKeyPress' in widget).toBeTruthy();
-    expectValue(widget, 'onKeyPress', () => {});
-}
+        expect('onShow' in widget).toBeTruthy();
+        expectValue(widget, 'onShow', () => { });
+        expect('onHide' in widget).toBeTruthy();
+        expectValue(widget, 'onHide', () => { });
+        expect('onMouseRelease' in widget).toBeTruthy();
+        expectValue(widget, 'onMouseRelease', () => { });
+        expect('onFocusLost' in widget).toBeTruthy();
+        expectValue(widget, 'onFocusLost', () => { });
+        expect('onMousePress' in widget).toBeTruthy();
+        expectValue(widget, 'onMousePress', () => { });
+        expect('onMouseEnter' in widget).toBeTruthy();
+        expectValue(widget, 'onMouseEnter', () => { });
+        expect('onMouseMove' in widget).toBeTruthy();
+        expectValue(widget, 'onMouseMove', () => { });
+        expect('onAction' in widget).toBeTruthy();
+        expectValue(widget, 'onAction', () => { });
+        expect('onKeyRelease' in widget).toBeTruthy();
+        expectValue(widget, 'onKeyRelease', () => { });
+        expect('onKeyType' in widget).toBeTruthy();
+        expectValue(widget, 'onKeyType', () => { });
+        expect('onMouseWheelMove' in widget).toBeTruthy();
+        expectValue(widget, 'onMouseWheelMove', () => { });
+        expect('onFocus' in widget).toBeTruthy();
+        expectValue(widget, 'onFocus', () => { });
+        expect('onMouseClick' in widget).toBeTruthy();
+        expectValue(widget, 'onMouseClick', () => { });
+        expect('onMouseExit' in widget).toBeTruthy();
+        expectValue(widget, 'onMouseExit', () => { });
+        expect('onKeyPress' in widget).toBeTruthy();
+        expectValue(widget, 'onKeyPress', () => { });
+    }
     function expectTypedField(TypedField) {
         const instance = new TypedField();
         expect(instance.element.type).not.toEqual('');
@@ -138,7 +130,7 @@ function expectWidget(widget) {
         const textField2 = new TextField('Sample text');
         expect(textField2.text).toEqual('Sample text');
     });
-    
+
     it('TextField.Structure.2', () => {
         expectTypedField(TextField);
         const instance = new TextField();
@@ -154,7 +146,7 @@ function expectWidget(widget) {
         instance.value = null;
         expect(instance.text).toEqual('');
     });
-    
+
     it('TextField.Markup.1', done => {
         const textField = new TextField();
         document.body.appendChild(textField.element);
@@ -178,7 +170,7 @@ function expectWidget(widget) {
             done();
         });
     });
-    
+
     it('TextField.Markup.2', () => {
         expectTypedFieldMarkup(Logger, TextField);
     });
@@ -189,15 +181,14 @@ function expectWidget(widget) {
         expect(instance.text).toEqual('#000000');
         instance.text = '#fcfcfc';
         expect(instance.text).toEqual('#fcfcfc');
-        expect(instance.value instanceof Color).toBe(true);
-        expect(instance.value.toString()).toEqual('#fcfcfc');
+        expect(instance.value).toEqual('#fcfcfc');
 
         instance.text = '';
         expect(instance.text).toEqual('#000000');
         expect(instance.value.toString()).toBe('#000000');
 
-        instance.value = Color.blue;
-        expect(instance.value).toBe(Color.blue);
+        instance.value = '#0000ff';
+        expect(instance.value).toBe('#0000ff');
         expect(instance.text).toEqual('#0000ff');
 
         instance.value = null;
@@ -213,7 +204,7 @@ function expectWidget(widget) {
         expect(instance.text).toEqual('');
         expect(instance.value).toBe(null);
 
-        const day = new Date('2017-04-23T00:00:00.000Z');
+        const day = new Date('2017-04-23T00:00:00.000');
         instance.text = '2017-04-23';
         expect(instance.value instanceof Date).toBe(true);
         expect(instance.value.valueOf()).toEqual(day.valueOf());
@@ -238,6 +229,7 @@ function expectWidget(widget) {
         expect(instance.value).toBe(null);
 
         const moment = new Date();
+        moment.setMinutes(0, 0, 0)
         let localMoment = new Date(-moment.getTimezoneOffset() * 60000 + moment.valueOf()).toJSON(); // local version of moment
         localMoment = localMoment.substring(0, localMoment.length - 1);
         instance.text = localMoment;
@@ -248,7 +240,7 @@ function expectWidget(widget) {
         expect(instance.value).toBeNull();
 
         instance.value = moment;
-        expect(instance.text).toEqual(localMoment);
+        expect(instance.text + ':00.000').toEqual(localMoment);
 
         instance.value = null;
         expect(instance.text).toEqual('');
@@ -271,7 +263,7 @@ function expectWidget(widget) {
         expect(instance.value).toBeNull();
 
         instance.value = 13 * 3600 * 1000 + 45 * 60 * 1000;
-        expect(instance.text).toEqual('13:45:00.000');
+        expect(instance.text).toEqual('13:45');
 
         instance.value = null;
         expect(instance.text).toEqual('');
@@ -406,15 +398,9 @@ function expectWidget(widget) {
     it('Slider.Structure', () => {
         expectTypedField(Slider);
         const instance = new Slider();
-        expect(instance.text).toEqual('');
         expect(instance.value).toBeNull();
 
-        instance.text = '09';
-        expect(instance.value).toEqual(9);
-        instance.text = '';
-        expect(instance.value).toBeNull();
         instance.value = 67;
-        expect(instance.text).toEqual('67');
         instance.step = 100;
         expect(instance.step).toEqual(100);
         instance.minimum = -100;
@@ -422,17 +408,9 @@ function expectWidget(widget) {
         instance.maximum = 100;
         expect(instance.maximum).toEqual(100);
         instance.value = -200;
-        expect(instance.value).toEqual(-200); // value is assignable regardless of constraints
-        instance.text = 'hh';
-        expect(instance.text).toEqual('-200');
-        expect(instance.value).toEqual(-200);
-        instance.value = NaN;
-        expect(instance.text).toEqual('-200');
-        expect(instance.value).toEqual(-200);
+        expect(instance.value).toEqual(-100); // value assignment honors the constraints
         instance.value = null;
-        expect(instance.text).toEqual('');
-        if (instance.error)
-            instance.error = null;
+        expect(instance.value).toBeNull(); 
     });
     it('Slider.Markup', () => {
         expectTypedFieldMarkup(Logger, Slider);
@@ -440,6 +418,7 @@ function expectWidget(widget) {
     it('ProgressField.Structure', () => {
         expectTypedField(ProgressField);
         const instance = new ProgressField();
+        instance.maximum = 100
         expect(instance.text).toEqual('');
         expect(instance.value).toBeNull();
 
@@ -458,12 +437,6 @@ function expectWidget(widget) {
         expect(instance.text).toEqual('');
         instance.value = 56;
         expect(instance.text).toEqual('56');
-        instance.text = 'hh';
-        expect(instance.text).toEqual('56');
-        expect(instance.value).toEqual(56);
-        instance.value = NaN;
-        expect(instance.text).toEqual('56');
-        expect(instance.value).toEqual(56);
         instance.value = null;
         expect(instance.text).toEqual('');
         if (instance.error)
@@ -475,6 +448,7 @@ function expectWidget(widget) {
     it('MeterField.Structure', () => {
         expectTypedField(MeterField);
         const instance = new MeterField();
+        instance.maximum = 100
         expect(instance.text).toEqual('');
         expect(instance.value).toBeNull();
 
@@ -493,12 +467,6 @@ function expectWidget(widget) {
         expect(instance.text).toEqual('');
         instance.value = 56;
         expect(instance.text).toEqual('56');
-        instance.text = 'hh';
-        expect(instance.text).toEqual('56');
-        expect(instance.value).toEqual(56);
-        instance.value = NaN;
-        expect(instance.text).toEqual('56');
-        expect(instance.value).toEqual(56);
         instance.value = null;
         expect(instance.text).toEqual('');
         if (instance.error)

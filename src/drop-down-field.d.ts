@@ -3,6 +3,8 @@ import ItemEvent from 'kenga/events/item-event'
 import HasValue from 'kenga/has-value'
 
 export default class DropDownField extends BoxField implements HasValue {
+  constructor(shell?: HTMLElement)
+  
   emptyText: string
 
   value: any

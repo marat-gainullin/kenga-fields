@@ -2,6 +2,8 @@ import BoxField from 'kenga/box-field'
 import HasValue from 'kenga/has-value'
 
 export default class ColorField extends BoxField implements HasValue {
+  constructor(shell?: HTMLElement)
+  
   text: string
   value: any
   textChanged(): void

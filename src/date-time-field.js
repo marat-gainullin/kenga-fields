@@ -24,7 +24,9 @@ class DateTimeField extends BoxField {
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                value = new Date(box.value);
+                /* Browsers have very strange behaviour here. They treat timezone explicitly. And the value after the .valueAsNumber = assignment gets distorted */
+                const offset = -(new Date()).getTimezoneOffset() * 60_000
+                value = box.valueAsNumber != null ? new Date(box.valueAsNumber - offset) : null;
             } else {
                 value = null;
             }
@@ -35,16 +37,16 @@ class DateTimeField extends BoxField {
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function() {
+            get: function () {
                 return textChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function() {
+            get: function () {
                 return box.value;
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 if (box.value !== aValue) {
                     box.value = aValue;
                     textChanged();
@@ -53,24 +55,17 @@ class DateTimeField extends BoxField {
         });
 
         Object.defineProperty(this, 'value', {
-            get: function() {
-                return value;
+            get: function () {
+                return value
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 if (value !== aValue) {
                     const oldValue = value;
-                    value = aValue;
+                    value = aValue
                     if (aValue != null) {
-                        let textValue = (aValue.getFullYear()+'').padStart(2, '0') + '-' + ((aValue.getMonth() + 1)+'').padStart(2, '0') + '-' + (aValue.getDate()+'').padStart(2, '0') + 'T' + (aValue.getHours()+'').padStart(2, '0') + ':' + (aValue.getMinutes()+'').padStart(2, '0');
-                        if (box.step != '') {
-                            if (box.step.toLowerCase() == 'any' || Number(box.step) < 60) {
-                              textValue += ':' + (aValue.getSeconds()+'').padStart(2, '0')
-                            }
-                            if (box.step.toLowerCase() == 'any' || Number(box.step) < 1) {
-                              textValue += '.' + (aValue.getMilliseconds()+'').padStart(2, '0')
-                            }
-                        }
-                        box.value = textValue
+                        /* Browsers have very strange behaviour here. They treat timezone explicitly. And the value after the .valueAsDate = assignment gets distorted */
+                        const offset = -(new Date()).getTimezoneOffset() * 60_000
+                        box.valueAsNumber = aValue != null ? aValue.getTime() + offset : null;
                     } else {
                         box.value = ''
                     }

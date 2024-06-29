@@ -1,4 +1,5 @@
 @import 'kenga/layout.css';
+@import './slider.css';
 
 .p-error-popup {
     position: absolute;

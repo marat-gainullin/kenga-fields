@@ -1,9 +1,5 @@
-/// <reference path="./text-field.d.ts"/>
+import TextField from './text-field'
 
-declare module 'kenga-fields/url-field' {
-  import TextField from 'kenga-fields/text-field'
-
-  export default class UrlField extends TextField {
-  }
-
+export default class UrlField extends TextField {
+  constructor(shell?: HTMLElement)
 }

@@ -42,6 +42,11 @@ class DropDownField extends BoxField {
                 value = valueAt(box.selectedIndex);
             }
             fireSelected(value);
+            if (value == null) {
+                shell.classList.add('p-indeterminate');
+            } else {
+                shell.classList.remove('p-indeterminate');
+            }
             self.fireValueChanged(oldValue);
         }
 

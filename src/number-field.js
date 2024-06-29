@@ -16,11 +16,11 @@ class NumberField extends ConstraintField {
 
         this.formatError = () => {
             const message = i18n['not.a.number'];
-            return message ? `${message}(${box.value})` : box.validationMessage;
+            return box.value != '' && message ? `${message}(${box.value})` : box.validationMessage;
         };
 
         this.checkValidity = () => {
-            return !isNaN(parseFloat(box.value));
+            return box.value == '' || !isNaN(parseFloat(box.value));
         };
 
         function textChanged() {

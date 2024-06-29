@@ -1,0 +1,89 @@
+.p-slider {
+    margin: 6px 18px 18px 10px;
+}
+
+.p-slider-track-left,
+.p-slider-track-right,
+.p-slider-thumb,
+.p-slider-tick {
+    position: absolute;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.p-slider-track-left,
+.p-slider-track-right {
+    transition: background .4s ease;
+    top: 50%;
+    height: 4px;
+    margin-top: -1px;
+}
+
+.p-slider-track-left {
+    left: 0;
+    width: 0;
+    background: lightblue;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.p-slider:hover>.p-slider-track-left {
+    background: blue;
+}
+
+.p-slider-track-right {
+    right: 0;
+    left: 100%;
+    background: lightgray;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.p-slider:hover>.p-slider-track-right {
+    background: gray;
+}
+
+.p-slider-thumb {
+    border-radius: 50%;
+    border: 2px solid blue;
+    background: white;
+    width: 8px;
+    height: 8px;
+    margin-top: -5px;
+    margin-left: -5px;
+    top: 50%;
+    transition: box-shadow .7s ease;
+}
+
+.p-slider:focus>.p-slider-ticks>.p-slider-thumb {
+    box-shadow: 0 0 0 5px lightgray;
+}
+
+.p-slider.p-indeterminate>.p-slider-ticks>.p-slider-thumb {
+    display: none;
+}
+
+.p-slider-ticks {
+    cursor: pointer;
+    position: relative;
+    padding: 6px;
+    height: 8px;
+    top: 50%;
+    margin-top: -10px;
+}
+
+.p-slider-tick {
+    top: 50%;
+    border-radius: 50%;
+
+    border: 2px solid blue;
+    background: white;
+    width: 4px;
+    height: 4px;
+    margin-top: -3px;
+    margin-left: -3px;
+}
+
+.p-slider-tick-label {
+    padding-top: 8px;
+}

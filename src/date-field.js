@@ -24,7 +24,9 @@ class DateField extends BoxField {
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                value = box.valueAsDate;
+                /* Browsers have very strange behaviour here. They treat timezone explicitly. And the value after the .valueAsNumber = assignment gets distorted */
+                const offset = -(new Date()).getTimezoneOffset() * 60_000
+                value = box.valueAsNumber != null ? new Date(box.valueAsNumber - offset) : null;
             } else {
                 value = null;
             }
@@ -54,15 +56,23 @@ class DateField extends BoxField {
 
         Object.defineProperty(this, 'value', {
             get: function () {
-                /* Browsers have very strange behaviour here. They treat timezone explicitly. And the value after the .valueAsDate = assignment gets distorted */
-                return box.valueAsDate != null ? new Date(box.valueAsDate.getTime() + box.valueAsDate.getTimezoneOffset() * 60_000) : null;
+                return value
             },
-            set: function (aValue) {
+            set: function (_aValue) {
+                const aValue = _aValue != null ? new Date(_aValue) : null
+                if(aValue != null){
+                    aValue.setHours(0, 0, 0, 0)
+                }
                 if (value !== aValue) {
                     const oldValue = value;
-                    value = aValue;
-                    /* Browsers have very strange behaviour here. They treat timezone explicitly. And the value after the .valueAsDate = assignment gets distorted */
-                    box.valueAsDate = value != null ? new Date(value.getTime() - value.getTimezoneOffset() * 60_000) : null;
+                    value = aValue
+                    if (aValue != null) {
+                        /* Browsers have very strange behaviour here. They treat timezone explicitly. And the value after the .valueAsDate = assignment gets distorted */
+                        const offset = -(new Date()).getTimezoneOffset() * 60_000
+                        box.valueAsNumber = aValue != null ? aValue.getTime() + offset : null;
+                    } else {
+                        box.value = ''
+                    }
                     self.fireValueChanged(oldValue);
                 }
             }

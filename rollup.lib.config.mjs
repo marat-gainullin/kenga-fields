@@ -5,7 +5,7 @@ import glob from 'fast-glob'
 import copy from "rollup-plugin-copy";
 
 const destDir = 'build/lib'
-const config = {
+export default args => ({
     input: glob.sync('src/**/*.js'),
     treeshake: false,
     external: [/^@babel\/runtime/, /^septima/, /^kenga/],
@@ -24,15 +24,11 @@ const config = {
         }),
         copy({
             targets: [
-                {src: 'src/**/*.d.ts', dest: destDir},
-                {src: 'src/*.css', dest: destDir},
-                {src: 'src/**/*.gif', dest: destDir},
-                {src: 'src/**/*.png', dest: destDir},
-                {src: 'package.json', dest: destDir}
-              ],
-              flatten: false
+              {src: 'src/**/*.d.ts', dest: destDir},
+              {src: 'src/**/*.css', dest: destDir},
+              {src: 'package.json', dest: destDir}
+            ],
+            flatten: false
         })
     ]
-};
-
-export default config;
+});

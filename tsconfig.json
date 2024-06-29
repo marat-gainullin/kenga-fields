@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "lib": ["es2019", "dom"],
+    "skipLibCheck": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "target": "es5",
+    "rootDir": "./src",
+    "outDir": "./build/lib",
+    "sourceMap": false,
+    "declaration": false
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.js"
+  ],
+  "exclude": [
+    "./src/**/*.test.ts"
+  ]
+}

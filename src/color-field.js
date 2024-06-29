@@ -1,4 +1,3 @@
-import Color from 'kenga/color';
 import BoxField from 'kenga/box-field';
 
 class ColorField extends BoxField {
@@ -12,18 +11,6 @@ class ColorField extends BoxField {
         const self = this;
         let value = null;
 
-        function format(color) {
-            return color ? color.toString() : '#fff';
-        }
-
-        function parse(source) {
-            const parsed = Color.parse(source);
-            return parsed ? new Color(parsed.red, parsed.green, parsed.blue, parsed.alpha) : parsed;
-        }
-
-        this.parse = parse;
-        this.format = format;
-
         this.checkValidity = () => {
             return true;
         };
@@ -31,7 +18,7 @@ class ColorField extends BoxField {
         function textChanged() {
             const oldValue = value;
             if (box.value !== '') {
-                value = self.parse(box.value);
+                value = box.value;
             } else {
                 value = null;
             }
@@ -42,16 +29,16 @@ class ColorField extends BoxField {
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
-            get: function() {
+            get: function () {
                 return textChanged;
             }
         });
 
         Object.defineProperty(this, 'text', {
-            get: function() {
+            get: function () {
                 return box.value;
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 if (box.value !== aValue) {
                     box.value = aValue;
                     textChanged();
@@ -60,14 +47,14 @@ class ColorField extends BoxField {
         });
 
         Object.defineProperty(this, 'value', {
-            get: function() {
+            get: function () {
                 return value;
             },
-            set: function(aValue) {
+            set: function (aValue) {
                 if (value !== aValue) {
                     const oldValue = value;
                     value = aValue;
-                    box.value = self.format(value);
+                    box.value = value;
                     self.fireValueChanged(oldValue);
                 }
             }
