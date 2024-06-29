@@ -1,6 +1,6 @@
 import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import {babel} from '@rollup/plugin-babel';
+import { babel } from '@rollup/plugin-babel';
 import glob from 'fast-glob'
 import copy from "rollup-plugin-copy";
 
@@ -19,14 +19,17 @@ export default args => ({
         nodeResolve(), commonjs(),
         babel({
             babelHelpers: 'runtime',
-            presets: [['@babel/preset-env', {modules: false}]],
+            presets: [['@babel/preset-env', { modules: false }]],
             plugins: [["@babel/plugin-transform-runtime", {}]]
         }),
         copy({
             targets: [
-              {src: 'src/**/*.d.ts', dest: destDir},
-              {src: 'src/**/*.css', dest: destDir},
-              {src: 'package.json', dest: destDir}
+                { src: 'src/**/*.d.ts', dest: destDir },
+                { src: 'src/**/*.css', dest: destDir },
+                { src: 'src/rich-text-area/*.css', dest: destDir },
+                { src: 'src/rich-text-area/*.gif', dest: destDir },
+                { src: 'src/rich-text-area/*.png', dest: destDir },
+                { src: 'package.json', dest: destDir }
             ],
             flatten: false
         })
