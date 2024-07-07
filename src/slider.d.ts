@@ -7,6 +7,8 @@ export default class Slider extends Widget implements HasValue {
   maximum: number
   step: number
   ticksStep: number
+  ticksMinimum: number
+  ticksMaximum: number
   continuousValueChange: boolean
   value: number
 

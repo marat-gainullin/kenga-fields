@@ -13,20 +13,26 @@ export default class Slider extends Widget {
     /*private*/ const _trackRight = document.createElement('div')//: HTMLElement
     /*private*/ const _thumb = document.createElement('div')//: HTMLElement
     /*private*/ const _ticks = document.createElement('div')//: HTMLElement
+    /*private*/ const _spacer = document.createElement('div')//: HTMLElement
     /*private*/ let _step = 1
     /*private*/ let _minimum = 0
     /*private*/ let _maximum = 100
+    /*private*/ let _ticksMinimum = null
     /*private*/ let _ticksStep = null
+    /*private*/ let _ticksMaximum = null
     /*private*/ let _value/*: number*/ = null
     /*private*/ let _continuousValueChange = false
         const self = this
 
         this.shell.classList.add('p-slider')
+        _spacer.classList.add('p-slider-spacer')
         _trackLeft.classList.add('p-slider-track-left')
         _trackRight.classList.add('p-slider-track-right')
         _thumb.classList.add('p-slider-thumb')
         _ticks.classList.add('p-slider-ticks')
         _ticks.appendChild(_thumb)
+        
+        this.shell.appendChild(_spacer)
         this.shell.appendChild(_trackLeft)
         this.shell.appendChild(_trackRight)
         this.shell.appendChild(_ticks)
@@ -136,6 +142,50 @@ export default class Slider extends Widget {
             }
         })
 
+        Object.defineProperty(this, 'ticksMinimum', {
+            get: function ()/*: number*/ {
+                return _ticksMinimum
+            },
+
+            set: function (value/*: number*/) {
+                if (_ticksMinimum != value) {
+                    if (value == null) {
+                        _ticksMinimum = value
+                    } else {
+                        const parsed = parseFloat(value)
+                        if (isNaN(parsed)) {
+                            _ticksMinimum = null
+                        } else {
+                            _ticksMinimum = parsed
+                        }
+                    }
+                    refillTicks()
+                }
+            }
+        })
+
+        Object.defineProperty(this, 'ticksMaximum', {
+            get: function ()/*: number*/ {
+                return _ticksMaximum
+            },
+
+            set: function (value/*: number*/) {
+                if (_ticksMaximum != value) {
+                    if (value == null) {
+                        _ticksMaximum = value
+                    } else {
+                        const parsed = parseFloat(value)
+                        if (isNaN(parsed)) {
+                            _ticksMaximum = null
+                        } else {
+                            _ticksMaximum = parsed
+                        }
+                    }
+                    refillTicks()
+                }
+            }
+        })
+
         Object.defineProperty(this, 'continuousValueChange', {
             get: function ()/*: boolean */ {
                 return _continuousValueChange
@@ -195,36 +245,47 @@ export default class Slider extends Widget {
             _thumb.title = val != null ? val + '' : ''
         }
 
+
+    /*private*/ function addTick(min/*: number*/, span/*: number*/, tickAt/*: number*/) {
+            const tick = document.createElement('div')
+            tick.classList.add('p-slider-tick');
+            const tickLabel = document.createElement('p')
+            tickLabel.classList.add('p-slider-tick-label')
+            const labelText = `${tickAt}`
+            tickLabel.innerHTML = labelText
+            tickLabel.style.marginLeft = `-${labelText.length / 4}em`;
+            (() => {
+                const wasTickAt = tickAt
+                tick.onpointerdown = () => {
+                    self.value = wasTickAt
+                }
+            })()
+            tick.style.left = `${(tickAt - min) / span * 100}%`
+
+            tick.appendChild(tickLabel)
+            _ticks.appendChild(tick)
+        }
+
     /*private*/ function refillTicks() {
             _ticks.innerHTML = ''
 
             if (_ticksStep != null) {
-                const min = _minimum ?? 0
-                const max = _maximum ?? 100
+                const valuesMin = _minimum ?? 0
+                const valuesMax = _maximum ?? 100
+                const min = _ticksMinimum ?? valuesMin
+                const max = _ticksMaximum ?? valuesMax
 
-                const span = (max - min) / 100
+                const span = max - min
 
+                addTick(valuesMin, 1, valuesMin)
                 let tickAt = min
                 while (tickAt <= max) {
-                    const tick = document.createElement('div')
-                    tick.classList.add('p-slider-tick');
-                    const tickLabel = document.createElement('p')
-                    tickLabel.classList.add('p-slider-tick-label')
-                    const labelText = `${tickAt}`
-                    tickLabel.innerHTML = labelText
-                    tickLabel.style.marginLeft = `-${labelText.length / 4}em`;
-                    (() => {
-                        const wasTickAt = tickAt
-                        tick.onpointerdown = () => {
-                            self.value = wasTickAt
-                        }
-                    })()
-                    tick.style.left = `${(tickAt - min) / span}%`
-
-                    tick.appendChild(tickLabel)
-                    _ticks.appendChild(tick)
+                    if (tickAt > valuesMin && tickAt < valuesMax) {
+                        addTick(min, span, tickAt)
+                    }
                     tickAt += _ticksStep
                 }
+                addTick(0, valuesMax, valuesMax)
             }
             _ticks.appendChild(_thumb)
         }
