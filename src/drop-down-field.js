@@ -34,6 +34,15 @@ class DropDownField extends BoxField {
             }
         }
 
+        function valueChanged(oldValue) {
+            if (value == null) {
+                shell.classList.add('p-indeterminate');
+            } else {
+                shell.classList.remove('p-indeterminate');
+            }
+            self.fireValueChanged(oldValue);
+        }
+
         function itemChanged() {
             const oldValue = value;
             if (box.selectedIndex === -1) {
@@ -42,12 +51,7 @@ class DropDownField extends BoxField {
                 value = valueAt(box.selectedIndex);
             }
             fireSelected(value);
-            if (value == null) {
-                shell.classList.add('p-indeterminate');
-            } else {
-                shell.classList.remove('p-indeterminate');
-            }
-            self.fireValueChanged(oldValue);
+            valueChanged(oldValue)
         }
 
         const selectHandlers = new Set();
@@ -103,6 +107,7 @@ class DropDownField extends BoxField {
             },
             set: function(aValue) {
                 if (value !== aValue) {
+                    const oldValue = value
                     if (aValue != null) {
                         const index = indexOfValue(aValue);
                         if (index !== -1) {
@@ -113,7 +118,8 @@ class DropDownField extends BoxField {
                     } else {
                         box.selectedIndex = indexOfValue(null);
                     }
-                    itemChanged();
+                    value = aValue
+                    valueChanged(oldValue);
                 }
             }
         });
@@ -123,7 +129,7 @@ class DropDownField extends BoxField {
                 return box.selectedIndex;
             },
             set: function(index) {
-                if (index >= 0 && index < getCount()) {
+                if (index >= 0 && index < box.options.length) {
                     box.selectedIndex = index;
                 } else {
                     box.selectedIndex = -1;
@@ -272,6 +278,9 @@ class DropDownField extends BoxField {
                 }
                 if (wasUnselected) {
                     box.selectedIndex = -1;
+                }
+                if (aValue == value) {
+                    box.selectedIndex = index;
                 }
             }
         }

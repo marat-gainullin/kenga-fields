@@ -272,16 +272,16 @@ export default class Slider extends Widget {
             if (_ticksStep != null) {
                 const valuesMin = _minimum ?? 0
                 const valuesMax = _maximum ?? 100
+                const valuesSpan = valuesMax - valuesMin
                 const min = _ticksMinimum ?? valuesMin
                 const max = _ticksMaximum ?? valuesMax
 
-                const span = max - min
 
                 addTick(valuesMin, 1, valuesMin)
                 let tickAt = min
                 while (tickAt <= max) {
                     if (tickAt > valuesMin && tickAt < valuesMax) {
-                        addTick(min, span, tickAt)
+                        addTick(valuesMin, valuesSpan, tickAt)
                     }
                     tickAt += _ticksStep
                 }
