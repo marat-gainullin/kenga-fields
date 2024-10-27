@@ -1,5 +1,9 @@
 import Widget from 'kenga/widget'
 import HasValue from 'kenga/has-value'
+import FocusEvent from 'kenga/events/focus-event'
+import BlurEvent from 'kenga/events/blur-event'
+import KeyEvent from 'kenga/events/key-event'
+import ValueChangeEvent from 'kenga/events/value-change-event'
 
 export default class Slider extends Widget implements HasValue {
   constructor(shell?: HTMLElement)
@@ -11,6 +15,7 @@ export default class Slider extends Widget implements HasValue {
   ticksMaximum: number
   continuousValueChange: boolean
   value: number
+  text: string
 
   addFocusHandler(handler: (evt: FocusEvent) => void): { removeHandler: () => void };
   addFocusLostHandler(handler: (evt: BlurEvent) => void): { removeHandler: () => void };
