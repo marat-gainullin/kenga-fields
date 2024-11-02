@@ -11,3 +11,11 @@
     display: inline-block;
     position: absolute;
 }
+
+.p-lookup-unmatch {
+    display: none;
+}
+
+.p-lookup-items {
+    box-sizing: border-box;    
+}

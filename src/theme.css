@@ -25,3 +25,12 @@
     visibility: hidden;
     border: 1px solid lightgray;
 }
+
+.p-lookup-item {
+    cursor: pointer;
+}
+
+.p-lookup-items {
+    overflow-x: hidden;    
+    overflow-y: auto;
+}

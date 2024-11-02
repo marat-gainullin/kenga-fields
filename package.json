@@ -1,6 +1,6 @@
 {
   "name": "kenga-fields",
-  "version": "0.0.45",
+  "version": "0.0.47",
   "description": "Kenga input widgets.",
   "repository": "https://github.com/marat-gainullin/kenga-fields.git",
   "author": "marat-gainullin <mg@altsoft.biz>",
@@ -13,7 +13,7 @@
     "upload": "rimraf ./build && rollup -c rollup.lib.config.mjs && npm publish ./build/lib"
   },
   "dependencies": {
-    "kenga": "0.0.55"
+    "kenga": "0.0.56"
   },
   "devDependencies": {
     "@babel/runtime": "^7.15.3",

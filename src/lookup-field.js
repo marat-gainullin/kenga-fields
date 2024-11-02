@@ -1,5 +1,8 @@
+import Ui from 'kenga/utils';
 import BoxField from 'kenga/box-field';
 import Popup from 'kenga/popup';
+
+const JS_VALUE = 'js-value'
 
 class LookupField extends BoxField {
     constructor(shell) {
@@ -11,13 +14,14 @@ class LookupField extends BoxField {
         super(box, shell);
         shell.classList.add('p-lookup')
 
+        this.validateOnInput = false
         const self = this;
         const itemsContainer = document.createElement('div');
         itemsContainer.classList.add('p-lookup-items')
-        const popup = new Popup(itemsContainer)
+        let popup = new Popup(itemsContainer)
 
         const items = []
-        let visibleItemCount = 8
+        itemsContainer.style.maxHeight = '8em'
         let value = null;
         let valuesIndicies = null;
         let emptyText = ''
@@ -30,22 +34,19 @@ class LookupField extends BoxField {
             if (!valuesIndicies) {
                 valuesIndicies = new Map();
                 for (let i = 0; i < items.length; i++) {
-                    valuesIndicies.set(items[i]['js-value'], i);
+                    valuesIndicies.set(items[i][JS_VALUE], i);
                 }
             }
         }
 
-        const mouseDownReg = Ui.on(box, Ui.Events.MOUSEDOWN, evt => {
-            popup.popupRelativeTo(box)
-        })
-        const inputReg = Ui.on(box, Ui.Events.INPUT, evt => {
-            const text = box.value.trim()
+        function filterLookup() {
+            const text = box.value.trim().toLowerCase()
             items.forEach(item => {
                 if (text == '') {
                     item.classList.remove('p-lookup-unmatch')
                     item.classList.remove('p-lookup-match')
                 } else {
-                    if (item.innerText.contains(text)) {
+                    if (item.innerText.toLowerCase().includes(text)) {
                         item.classList.remove('p-lookup-unmatch')
                         item.classList.add('p-lookup-match')
                     } else {
@@ -54,16 +55,50 @@ class LookupField extends BoxField {
                     }
                 }
             })
-            if (!popup.shown) {
-                popup.popupRelativeTo(box)
+        }
+
+        function valueToBox() {
+            if (value != null) {
+                const at = indexOfValue(value)
+                box.value = box.placeholder = labelAt(at);
+            } else {
+                box.value = ''
+                box.placeholder = emptyText
             }
+        }
+
+        const mouseDownReg = Ui.on(box, Ui.Events.MOUSEDOWN, evt => {
+            itemsContainer.style.width = `${box.offsetWidth}px`
+            box.value = ''
+            filterLookup()
+            popup.popupRelativeTo(box, false, true, true)
+        })
+        const inputReg = Ui.on(box, Ui.Events.INPUT, evt => {
+            filterLookup()
+            if (!popup.shown) {
+                itemsContainer.style.width = `${box.offsetWidth}px`
+                popup.popupRelativeTo(box, false, true, true)
+            }
+        })
+        const blurReg = Ui.on(box, Ui.Events.BLUR, evt => {
+            Ui.later(() => {
+                valueToBox()
+            })
         })
 
         function textChanged() {
-            const foundAt = items.findIndex(item => item.innerText == box.value)
-            if (foundAt != -1) {
-                self.value = valueAt(foundAt)
-                box.value = labelAt(foundAt)
+            const text = box.value.trim().toLowerCase()
+            if (text == '') {
+                self.value = null
+            } else {
+                const found = items.filter(item => item.innerText.toLowerCase().includes(text))
+                const equalsAt = items.findIndex(item => item.innerText.toLowerCase() == text)
+                if (equalsAt != -1 && found.length == 1) {
+                    self.value = valueAt(equalsAt)
+                    Ui.later(() => {
+                        popup.close()
+                    })
+                }
             }
         }
 
@@ -94,13 +129,14 @@ class LookupField extends BoxField {
                 if (value !== aValue) {
                     const oldValue = value
                     value = aValue
-                    if (value != null) {
-                        const at = indexOfValue(value)
-                        box.value = box.placeholder = labelAt(at);
-                    } else {
-                        box.value = ''
-                        box.placeholder = emptyText
-                    }
+                    valueToBox()
+                    items.forEach(item => {
+                        if (item[JS_VALUE] == value) {
+                            item.classList.add('p-lookup-selected')
+                        } else {
+                            item.classList.remove('p-lookup-selected')
+                        }
+                    })
                     self.fireValueChanged(oldValue);
                 }
             }
@@ -125,12 +161,14 @@ class LookupField extends BoxField {
             }
         });
 
-        Object.defineProperty(this, 'visibleItemCount', {
+        Object.defineProperty(this, 'lookupHeight', {
             get: function () {
-                return visibleItemCount;
+                return itemsContainer.style.maxHeight;
             },
             set: function (aValue) {
-                visibleItemCount = aValue;
+                if (itemsContainer.style.maxHeight != aValue) {
+                    itemsContainer.style.maxHeight = aValue
+                }
             }
         });
 
@@ -200,7 +238,7 @@ class LookupField extends BoxField {
 
         function valueAt(index) {
             const item = itemAt(index);
-            return item ? item['js-value'] : null;
+            return item ? item[JS_VALUE] : null;
         }
 
         Object.defineProperty(this, 'valueAt', {
@@ -233,8 +271,11 @@ class LookupField extends BoxField {
         });
 
         function clear() {
+            popup.close()
             invalidateValuesIndicies();
             items.length = 0
+            itemsContainer.innerHTML = ''
+            popup = new Popup(itemsContainer)
         }
 
         Object.defineProperty(this, 'clear', {
@@ -248,7 +289,7 @@ class LookupField extends BoxField {
                 const item = document.createElement('div');
                 item.classList.add('p-lookup-item')
                 item.innerText = aLabel;
-                item['js-value'] = aValue;
+                item[JS_VALUE] = aValue;
                 const clickReg = Ui.on(item, Ui.Events.CLICK, evt => {
                     self.value = aValue;
                     popup.close();
@@ -277,8 +318,12 @@ class LookupField extends BoxField {
         }
 
         function indexOfValue(aValue) {
-            validateValuesIndicies();
-            return valuesIndicies.get(aValue);
+            if (aValue != null) {
+                validateValuesIndicies();
+                return valuesIndicies.get(aValue);
+            } else {
+                -1
+            }
         }
 
         Object.defineProperty(this, 'indexOfValue', {
