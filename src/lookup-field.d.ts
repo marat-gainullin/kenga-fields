@@ -13,8 +13,12 @@ export default class LookupField extends BoxField implements HasValue {
 
   selectedIndex: number
   count: number
-  visibleItemCount: number
+  lookupHeight: string
 
+  showLookup(clearText = false): void
+  hideLookup(): void
+  onShowLookup: () => void;
+  onHideLookup: () => void;
   addValue(aLabel: string, aValue: any): void
   insertValue(insertAt: number, aLabel: string, aValue: any): void
   updateLabel(aValue: any, aLabel: string): void

@@ -13,7 +13,7 @@
     "upload": "rimraf ./build && rollup -c rollup.lib.config.mjs && npm publish ./build/lib"
   },
   "dependencies": {
-    "kenga": "0.0.59"
+    "kenga": "0.0.60"
   },
   "devDependencies": {
     "@babel/runtime": "^7.15.3",

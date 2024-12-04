@@ -13,15 +13,24 @@ class LookupField extends BoxField {
         }
         super(box, shell);
         shell.classList.add('p-lookup')
+        shell.classList.add('p-lookup-values-hidden')
 
         this.validateOnInput = false
         const self = this;
         const itemsContainer = document.createElement('div');
         itemsContainer.classList.add('p-lookup-items')
         let popup = new Popup(itemsContainer)
+        popup.addShowHandler(() => { 
+            shell.classList.add('p-lookup-values-shown') 
+            shell.classList.remove('p-lookup-values-hidden') 
+        })
+        popup.addHideHandler(() => {
+            shell.classList.add('p-lookup-values-hidden')
+            shell.classList.remove('p-lookup-values-shown')
+        })
 
         const items = []
-        itemsContainer.style.maxHeight = '8em'
+        itemsContainer.style.maxHeight = '20vh'
         let value = null;
         let valuesIndicies = null;
         let emptyText = ''
@@ -67,18 +76,26 @@ class LookupField extends BoxField {
             }
         }
 
-        const mouseDownReg = Ui.on(box, Ui.Events.MOUSEDOWN, evt => {
-            itemsContainer.style.width = `${box.offsetWidth}px`
-            box.value = ''
-            filterLookup()
-            popup.popupRelativeTo(box, false, true, true)
-        })
-        const inputReg = Ui.on(box, Ui.Events.INPUT, evt => {
+        function showLookup(clearText = false) {
+            if (clearText) {
+                box.value = ''
+            }
             filterLookup()
             if (!popup.shown) {
                 itemsContainer.style.width = `${box.offsetWidth}px`
                 popup.popupRelativeTo(box, false, true, true)
             }
+        }
+
+        function hideLookup() {
+            popup.close()
+        }
+
+        const mouseDownReg = Ui.on(box, Ui.Events.MOUSEDOWN, evt => {
+            showLookup(true)
+        })
+        const inputReg = Ui.on(box, Ui.Events.INPUT, evt => {
+            showLookup()
         })
         const blurReg = Ui.on(box, Ui.Events.BLUR, evt => {
             Ui.later(() => {
@@ -101,6 +118,37 @@ class LookupField extends BoxField {
                 }
             }
         }
+
+        Object.defineProperty(this, 'showLookup', {
+            enumerable: false,
+            get: function () {
+                return showLookup;
+            }
+        });
+
+        Object.defineProperty(this, 'hideLookup', {
+            enumerable: false,
+            get: function () {
+                return showLookup;
+            }
+        });
+
+        Object.defineProperty(this, 'onShowLookup', {
+            get: function () {
+                return popup.onShow;
+            },
+            set: function (aValue) {
+                popup.onShow = aValue
+            }
+        });
+        Object.defineProperty(this, 'onHideLookup', {
+            get: function () {
+                return popup.onHide;
+            },
+            set: function (aValue) {
+                popup.onHide = aValue
+            }
+        });
 
         Object.defineProperty(this, 'textChanged', {
             enumerable: false,
@@ -274,8 +322,6 @@ class LookupField extends BoxField {
             popup.close()
             invalidateValuesIndicies();
             items.length = 0
-            itemsContainer.innerHTML = ''
-            popup = new Popup(itemsContainer)
         }
 
         Object.defineProperty(this, 'clear', {
