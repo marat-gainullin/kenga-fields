@@ -15,7 +15,7 @@ export default class LookupField extends BoxField implements HasValue {
   count: number
   lookupHeight: string
 
-  showLookup(clearText = false): void
+  showLookup(clearText: boolean): void
   hideLookup(): void
   onShowLookup: () => void;
   onHideLookup: () => void;
