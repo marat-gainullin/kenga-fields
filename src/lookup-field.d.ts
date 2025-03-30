@@ -19,6 +19,7 @@ export default class LookupField extends BoxField implements HasValue {
   hideLookup(): void
   onShowLookup: () => void;
   onHideLookup: () => void;
+  onRowRender: (datum: any, cell: HTMLElement, index: number) => void;
   addValue(aLabel: string, aValue: any): void
   insertValue(insertAt: number, aLabel: string, aValue: any): void
   updateLabel(aValue: any, aLabel: string): void

@@ -19,21 +19,72 @@ class LookupField extends BoxField {
         const self = this;
         const itemsContainer = document.createElement('div');
         itemsContainer.classList.add('p-lookup-items')
-        let popup = new Popup(itemsContainer)
-        popup.addShowHandler(() => { 
-            shell.classList.add('p-lookup-values-shown') 
-            shell.classList.remove('p-lookup-values-hidden') 
-        })
-        popup.addHideHandler(() => {
-            shell.classList.add('p-lookup-values-hidden')
-            shell.classList.remove('p-lookup-values-shown')
-        })
 
         const items = []
         itemsContainer.style.maxHeight = '20vh'
         let value = null;
         let valuesIndicies = null;
         let emptyText = ''
+        let onRowRender = null
+        let focusedItem = null
+
+        let popup = new Popup(itemsContainer)
+        popup.addShowHandler(() => {
+            shell.classList.add('p-lookup-values-shown')
+            shell.classList.remove('p-lookup-values-hidden')
+            focusSelectedItem()
+        })
+        popup.addHideHandler(() => {
+            shell.classList.add('p-lookup-values-hidden')
+            shell.classList.remove('p-lookup-values-shown')
+            if (focusedItem != null) {
+                focusedItem.classList.remove('p-lookup-focused')
+            }
+            focusedItem = null
+        })
+
+        function focusPreviousItem() {
+            if (items.length > 0) {
+                let item = focusedItem?.previousElementSibling ?? items[items.length - 1]
+                while (item != null && (item.hasAttribute('disabled') || item.classList.contains('p-lookup-unmatch'))) {
+                    item = item.previousElementSibling
+                }
+                if (item != null) {
+                    if (focusedItem != null) {
+                        focusedItem.classList.remove('p-lookup-focused')
+                    }
+                    focusedItem = item
+                    focusedItem.classList.add('p-lookup-focused')
+                    focusedItem.scrollIntoView()
+                }
+            }
+        }
+
+        function focusNextItem() {
+            if (items.length > 0) {
+                let item = focusedItem?.nextElementSibling ?? items[0]
+                while (item != null && (item.hasAttribute('disabled') || item.classList.contains('p-lookup-unmatch'))) {
+                    item = item.nextElementSibling
+                }
+                if (item != null) {
+                    if (focusedItem != null) {
+                        focusedItem.classList.remove('p-lookup-focused')
+                    }
+                    focusedItem = item
+                    focusedItem.classList.add('p-lookup-focused')
+                    focusedItem.scrollIntoView()
+                }
+            }
+        }
+
+        function focusSelectedItem() {
+            let selectedIndex = indexOfValue(value)
+            focusedItem = itemAt(selectedIndex)
+            if (focusedItem != null) {
+                focusedItem.classList.add('p-lookup-focused')
+                focusedItem.scrollIntoView()
+            }
+        }
 
         function invalidateValuesIndicies() {
             valuesIndicies = null;
@@ -48,9 +99,9 @@ class LookupField extends BoxField {
             }
         }
 
-        function filterLookup() {
+        function matchLookup() {
             const text = box.value.trim().toLowerCase()
-            items.forEach(item => {
+            items.forEach((item, at) => {
                 if (text == '') {
                     item.classList.remove('p-lookup-unmatch')
                     item.classList.remove('p-lookup-match')
@@ -80,7 +131,7 @@ class LookupField extends BoxField {
             if (clearText) {
                 box.value = ''
             }
-            filterLookup()
+            matchLookup()
             if (!popup.shown) {
                 itemsContainer.style.width = `${box.offsetWidth}px`
                 popup.popupRelativeTo(box, false, true, true)
@@ -93,6 +144,26 @@ class LookupField extends BoxField {
 
         const mouseDownReg = Ui.on(box, Ui.Events.MOUSEDOWN, evt => {
             showLookup(true)
+        })
+
+        const keyDownReg = Ui.on(box, Ui.Events.KEYDOWN, evt => {
+            const key = `${evt.key}`.toLowerCase()
+            if (key == 'arrowdown') {
+                if (popup.shown) {
+                    focusNextItem()
+                } else {
+                    showLookup(true)
+                }
+            } else if (key == 'arrowup') {
+                focusPreviousItem()
+            } else if (key == 'escape') {
+                hideLookup()
+            } else if (key == 'enter') {
+                if (focusedItem != null) {
+                    self.value = focusedItem[JS_VALUE]
+                }
+                popup.close();
+            }
         })
         const inputReg = Ui.on(box, Ui.Events.INPUT, evt => {
             showLookup()
@@ -129,7 +200,7 @@ class LookupField extends BoxField {
         Object.defineProperty(this, 'hideLookup', {
             enumerable: false,
             get: function () {
-                return showLookup;
+                return hideLookup;
             }
         });
 
@@ -147,6 +218,14 @@ class LookupField extends BoxField {
             },
             set: function (aValue) {
                 popup.onHide = aValue
+            }
+        });
+        Object.defineProperty(this, 'onRowRender', {
+            get: function () {
+                return onRowRender;
+            },
+            set: function (aValue) {
+                onRowRender = aValue
             }
         });
 
@@ -322,6 +401,11 @@ class LookupField extends BoxField {
             popup.close()
             invalidateValuesIndicies();
             items.length = 0
+            let child = itemsContainer.firstElementChild
+            while (child != null) {
+                itemsContainer.removeChild(child)
+                child = itemsContainer.firstElementChild
+            }
         }
 
         Object.defineProperty(this, 'clear', {
@@ -337,9 +421,15 @@ class LookupField extends BoxField {
                 item.innerText = aLabel;
                 item[JS_VALUE] = aValue;
                 const clickReg = Ui.on(item, Ui.Events.CLICK, evt => {
-                    self.value = aValue;
-                    popup.close();
+                    const enabled = !item.hasAttribute('disabled')
+                    if (enabled) {
+                        self.value = aValue;
+                        popup.close();
+                    }
                 })
+                if (onRowRender) {
+                    onRowRender(aValue, item, index)
+                }
                 if (index === items.length) {
                     itemsContainer.appendChild(item)
                     items.push(item)
@@ -368,7 +458,7 @@ class LookupField extends BoxField {
                 validateValuesIndicies();
                 return valuesIndicies.get(aValue);
             } else {
-                -1
+                return -1
             }
         }
 
